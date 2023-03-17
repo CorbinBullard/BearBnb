@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     /**
      * Add seed commands here.
      *
@@ -22,28 +22,28 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   options.tableName = 'Users'
-   await queryInterface.bulkInsert(options, [
-    {
-      email: 'demo@user.io',
-      username: 'DemoUser',
-      hashedPassword: bcrypt.hashSync('password'),
-    },
-     {
-       email: 'user1@user.io',
-       username: 'FakeUser1',
-       hashedPassword: bcrypt.hashSync('password1'),
-     },
-     {
-       email: 'user2@user.io',
-       username: 'FakeUser2',
-       hashedPassword: bcrypt.hashSync('password2'),
-     }
-   ])
+    options.tableName = 'Users'
+    await queryInterface.bulkInsert(options, [
+      {
+        email: 'demo@user.io',
+        username: 'DemoUser',
+        hashedPassword: bcrypt.hashSync('password'),
+      },
+      {
+        email: 'user1@user.io',
+        username: 'FakeUser1',
+        hashedPassword: bcrypt.hashSync('password1'),
+      },
+      {
+        email: 'user2@user.io',
+        username: 'FakeUser2',
+        hashedPassword: bcrypt.hashSync('password2'),
+      }
+    ])
 
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *
