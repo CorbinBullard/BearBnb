@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      
       // Spots
       User.hasMany(models.Spot, {foreignKey: 'ownerId'})
       //Bookings
@@ -19,11 +20,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         otherKey: 'spotId'
       })
+      User.hasMany(models.Booking, {foreignKey: 'userId'})
+      //Reviews
       User.belongsToMany(models.Spot, {
         through: 'Review',
         foreignKey: 'userId',
         otherKey: 'spotId'
       })
+      User.hasMany(models.Review, {foreignKey: 'userId'})
 
     }
   }
