@@ -286,7 +286,7 @@ router.delete('/:spotId', requireAuth, async (req, res) => {
     const { user } = req;
     if (spot.ownerId !== user.id) return res.json({ message: "You do not have permission to change this data" });
 
-    await spot.detroy();
+    await spot.destroy();
     res.json({message: "Successfully deleted"});
 
 })
