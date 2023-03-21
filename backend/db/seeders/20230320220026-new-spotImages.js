@@ -3,8 +3,7 @@ let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
-options.tableName = 'Bookings'
-
+options.tableName = 'SpotImages'
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -20,18 +19,20 @@ module.exports = {
     await queryInterface.bulkInsert(options, [
       {
         spotId: 1,
-        userId: 2,
-        startDate: '09/12/2024',
-        endDate: '09/13/2024'
+        url: 'pic1',
+        preview: true
       },
       {
         spotId: 2,
-        userId: 3,
-        startDate: '09/12/2024',
-        endDate: '09/13/2024'
+        url: 'pic2',
+        preview: true
+      },
+      {
+        spotId: 3,
+        url: 'pic3',
+        preview: false
       }
     ])
-
   },
 
   async down(queryInterface, Sequelize) {

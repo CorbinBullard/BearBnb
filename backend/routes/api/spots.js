@@ -1,11 +1,26 @@
 const express = require('express');
+const { Op } = require('sequelize');
 const app = require('../../app');
 const router = express.Router();
-const { Spot } = require('../../db/models')
-const { requireAuth } = require('../../utils/auth.js')
+const { Spot, Review, SpotImage } = require('../../db/models');
+const review = require('../../db/models/review');
+const spot = require('../../db/models/spot');
+const { requireAuth } = require('../../utils/auth.js');
 
 router.get('/', async (req, res) => {
-    const spots = await Spot.findAll();
+
+    let Spots = []
+
+    const spots = await Spot.findAll({
+        include: {
+            model: SpotImage,
+            attributes: ['url']
+        }
+    })
+
+
+    // console.log(allSpots)
+
 
     res.json(spots);
 })
