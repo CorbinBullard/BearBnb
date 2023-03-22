@@ -9,22 +9,16 @@ const { check } = require('express-validator');
 router.delete('/:imageId', requireAuth, async (req, res) => {
 
     const { user } = req;
-    const image = await SpotImage.findByPk(req.params.imageId);
+    const image = await ReviewImage.findByPk(req.params.imageId);
 
-    if (!image) return res.status(404).json({message: "Spot Image couldn't be found"});
-    const spot = await image.getSpot();
-    if (spot.dataValues.ownerId !== user.id) return res.status(404).json({message: "forbidden"});
+    if (!image) return res.status(404).json({ message: "Spot Image couldn't be found" });
+    const review = await image.getReview();
+    if (review.dataValues.userId !== user.id) return res.status(404).json({ message: "forbidden" });
 
     await image.destroy();
 
-    res.json({message: "Successfully deleted"});
+    res.json({ message: "Successfully deleted" });
 })
-
-
-
-
-
-
 
 
 
