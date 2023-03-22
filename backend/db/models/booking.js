@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { all } = require('../../routes/api');
 module.exports = (sequelize, DataTypes) => {
   class Booking extends Model {
     /**
@@ -12,22 +13,34 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       //User
-      Booking.belongsTo(models.User, {foreignKey: 'userId'})
+      Booking.belongsTo(models.User, { foreignKey: 'userId' })
       //Spot
-      Booking.belongsTo(models.Spot, { foreignKey: 'spotId'})
+      Booking.belongsTo(models.Spot, { foreignKey: 'spotId' })
     }
   }
   Booking.init({
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     spotId: {
       type: DataTypes.INTEGER,
-      references: {model: 'Spot'}
+      references: { model: 'Spot' }
     },
     userId: {
       type: DataTypes.INTEGER,
-      references: {model: 'User'}
+      references: { model: 'User' }
     },
-    startDate: DataTypes.DATE,
-    endDate: DataTypes.DATE
+    startDate: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    endDate: {
+      type: DataTypes.DATE,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Booking',
