@@ -1,17 +1,14 @@
 const express = require('express');
 const { Op } = require('sequelize');
-const app = require('../../app');
 const router = express.Router();
-const { Spot, Review, SpotImage } = require('../../db/models');
-const review = require('../../db/models/review');
-const spot = require('../../db/models/spot');
+const { User, Spot, Review, SpotImage, ReviewImage } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth.js');
-const { route } = require('./session');
 const { handleValidationErrors } = require('../../utils/validation.js');
 const { check } = require('express-validator');
 
 
-// Get current user
+
+
 
 //Get Spots From Current User ===============>
 router.get('/current', async (req, res) => {
@@ -43,7 +40,7 @@ router.get('/current', async (req, res) => {
             }
         })
         const url = image === null ? null : image.dataValues.url
-        console.log("URL :  ", url)
+        // console.log("URL :  ", url)
 
         let spotObj = {
             id: spot.id,
@@ -93,6 +90,7 @@ router.get('/:spotId', async (req, res) => {
         attributes: ['id', 'url', 'preview']
     })
 
+    const Owner = await spot.getUser({ attributes: ['id', 'firstName', 'lastName'] })
 
     let spotObj = {
         id: spot.id,
@@ -108,8 +106,10 @@ router.get('/:spotId', async (req, res) => {
         price: spot.price,
         createdAt: spot.createdAt,
         updatedAt: spot.updatedAt,
+        numReviews: count,
         avgRating: sum / count,
-        SpotImages: url
+        SpotImages: url,
+        Owner: Owner
     }
 
     res.json(spotObj);
@@ -181,7 +181,7 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 
     // Check user permission
     const { user } = req;
-    if (spot.ownerId !== user.id) return res.json({ message: "You do not have permission to change this data" })
+    if (spot.ownerId !== user.id) return res.status(403).json({ message: "Forbidden" });
 
     const img = await spot.createSpotImage({
         url,
@@ -263,8 +263,8 @@ router.put('/:spotId', requireAuth, validateNewSpot, async (req, res) => {
     if (!spot) return res.status(404).json({ message: 'Spot could not be found' });
 
     // Check user permission
-    const {user} = req;
-    if (spot.ownerId !== user.id) return res.json({ message: "You do not have permission to change this data" })
+    const { user } = req;
+    if (spot.ownerId !== user.id) return res.status(403).json({ message: "Forbidden" });
 
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
@@ -284,10 +284,72 @@ router.delete('/:spotId', requireAuth, async (req, res) => {
 
     // Check user permission
     const { user } = req;
-    if (spot.ownerId !== user.id) return res.json({ message: "You do not have permission to change this data" });
+    if (spot.ownerId !== user.id) return res.status(403).json({ message: "Forbidden" });
 
     await spot.destroy();
-    res.json({message: "Successfully deleted"});
+    res.json({ message: "Successfully deleted" });
+
+})
+
+
+// <============================= REVIEWS ====================================>
+// GET REVIEWS from SpotId
+
+router.get('/:spotId/reviews', async (req, res) => {
+
+    const spot = await Spot.findByPk(req.params.spotId);
+
+    if (!spot) return res.status(404).json({ message: "Spot couldn't be found" })
+
+    const Reviews = [];
+
+    const reviews = await spot.getReviews({
+        attributes: ['id', 'userId', 'spotId', 'review', 'stars', 'createdAt', 'updatedAt'],
+        include: [{ model: User, attributes: ['id', 'firstName', 'lastName'] }]
+    });
+
+    for (let i = 0; i < reviews.length; i++) {
+        const review = reviews[i];
+
+        const reviewImages = await review.getReviewImages({ attributes: ['id', 'url'] });
+
+        let obj = {
+            ...review.dataValues,
+            reviewImages
+        }
+        Reviews.push(obj)
+    }
+
+    res.json({ Reviews })
+})
+
+const validReviewData = [
+    check('review')
+        .exists({ checkFalsy: true })
+        .withMessage('Review text is required'),
+    check('stars')
+        .custom((value, { req }) => value >= 0 && value <= 5)
+        .withMessage('Stars must be an integer from 1 to 5'),
+    handleValidationErrors
+]
+
+// Create Review from Spot Id
+router.post('/:spotId/reviews', requireAuth, validReviewData, async (req, res) => {
+    const { review, stars } = req.body;
+    const { user } = req;
+
+
+    const spot = await Spot.findByPk(req.params.spotId);
+    if (!spot) return res.status(404).json({ message: "Spot couldn't be found" });
+
+    const newReview = await spot.createReview({
+        review,
+        stars,
+        userId: user.id
+    })
+
+
+    res.json(newReview)
 
 })
 
