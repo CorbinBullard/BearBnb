@@ -1,4 +1,7 @@
 'use strict';
+
+const { DATEONLY } = require('sequelize');
+
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
@@ -21,14 +24,14 @@ module.exports = {
       {
         spotId: 1,
         userId: 2,
-        startDate: '09/12/2024',
-        endDate: '09/13/2024'
+        startDate: new Date("2023-12-21"),
+        endDate: new Date("2024-01-07")
       },
       {
         spotId: 2,
         userId: 3,
-        startDate: '09/12/2024',
-        endDate: '09/13/2024'
+        startDate: new Date("2024-10-21"),
+        endDate: new Date("2024-10-24")
       }
     ])
 
