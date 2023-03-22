@@ -42,7 +42,7 @@ router.get('/current', requireAuth, async (req, res) => {
                 previewImage: "No image found"
             }
         }
-        console.log(booking.startDate, booking.endDate)
+        // console.log(booking.startDate, booking.endDate)
         const obj = {
             id: booking.id,
             spotId: booking.spotId,

@@ -116,13 +116,74 @@ router.get('/:spotId', async (req, res) => {
 })
 
 //Get ALL Spots ===============>
+const validateQueries = [
+    check('page')
+        .custom((value, {req}) => value > 0)
+        .withMessage("Page must be greater than or equal to 1"),
+    check('size')
+        .custom((value, {req}) => value > 0)
+        .withMessage("Size must be greater than or equal to 1"),
+    // check('maxLat')
+    //     .custom((value, { req }) => typeof value === 'number')
+    //     .withMessage("Maximum latitude is invalid"),
+    handleValidationErrors
+]
+
 router.get('/', async (req, res) => {
 
     const Spots = [];
 
-    const spots = await Spot.findAll({
+    // ===== query filters
+    const errors = {};
+    let pagination = {};
+    const where = {};
 
+    const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+    
+    //ERROR CHECK
+    if (page && page < 1) errors.page = "Page must be greater than or equal to 1";
+    if (size && size < 1) errors.size = "Size must be greater than or equal to 1";
+    if (maxLat && isNaN(maxLat)) errors.maxLat = "Minimum latitude is invalid";
+    if (minLat && isNaN(minLat)) errors.minLat = "Minimum latitude is invalid";
+    if (maxLng && isNaN(maxLng)) errors.maxLng = "Minimum Longitude is invalid";
+    if (minLng && isNaN(minLng)) errors.minLng = "Minimum Longitude is invalid";
+    if (minPrice && minPrice <= 0) errors.minPrice = "Minimum price must be greater than or equal to 0";
+    if (maxPrice && maxPrice <= 0) errors.maxPrice = "Maximum price must be greater than or equal to 0";
+
+    //pagination
+    const limit = size === undefined ? 20 : Number(size);
+    const offset = page === undefined ? 0 : size * (page - 1);
+
+    if (limit >= 1) pagination.limit = limit;
+
+    if (page >= 1) pagination.offset = offset;
+
+
+    // where filters
+    if (minLat) {
+        where.lat = { [Op.gte]: minLat }
+    }
+    if (maxLat) {
+        where.lat = { [Op.lte]: maxLat }
+    }
+
+    if (minLng) where.lng = { [Op.gte]: minLng }
+    if (maxLng) where.lng = { [Op.lte]: maxLng }
+
+    if (minPrice) where.price = { [Op.gte]: minPrice }
+    if (maxPrice) where.price = { [Op.lte]: maxPrice }
+
+    //Check errors object
+    if (Object.keys(errors).length) return res.status(400).json({ message: "Bad request", errors })
+
+    const spots = await Spot.findAll({
+        ...pagination,
+        where
     })
+
+    // ^^^ query filters
+
+
     //  spots.forEach(async (spot) => {
     for (let i = 0; i < spots.length; i++) {
         let spot = spots[i];
@@ -143,7 +204,7 @@ router.get('/', async (req, res) => {
             }
         })
         const url = image === null ? null : image.dataValues.url
-        console.log("URL :  ", url)
+        // console.log("URL :  ", url)
 
         let spotObj = {
             id: spot.id,
@@ -169,7 +230,11 @@ router.get('/', async (req, res) => {
     // console.log(Spots)
 
 
-    res.json({ Spots });
+    res.json({
+        Spots,
+        page: Number(page) || 1,
+        size: pagination.limit
+    });
 })
 
 // Create Image for a Spot ===============>
@@ -367,7 +432,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
 
     const bookings = await spot.getBookings();
 
-    console.log(spot.dataValues.ownerId, user.id)
+    // console.log(spot.dataValues.ownerId, user.id)
     const bookingsArr = []
 
     if (spot.dataValues.ownerId === user.id) { // IS OWNER
@@ -430,8 +495,6 @@ router.post('/:spotId/bookings', requireAuth, validateDates, async (req, res, ne
     const end = new Date(endDate);
     const spot = await Spot.findByPk(req.params.spotId);
 
-    console.log("Start Date:  ", start)
-
     // Check if Valid Spot
     if (!spot) return res.status(404).json({ message: "Spot couldn't be found" });
     // Check if User OWNS this Spot
@@ -442,7 +505,7 @@ router.post('/:spotId/bookings', requireAuth, validateDates, async (req, res, ne
     if (start.getTime() > end.getTime()) {
 
         errors.endDate = "endDate cannot be on or before startDate"
-        res.status(400).json({ message: "Bad Request", errors})
+        res.status(400).json({ message: "Bad Request", errors })
     }
 
     // Check if Spot is already booked during dates
@@ -454,8 +517,8 @@ router.post('/:spotId/bookings', requireAuth, validateDates, async (req, res, ne
         const currStartingDate = new Date(booking.dataValues.startDate);
         const currEndingDate = new Date(booking.dataValues.endDate);
 
-        console.log(start.getTime(), currStartingDate.getTime(), currEndingDate.getTime())
-        console.log(start.getTime() >= currStartingDate.getTime() && start.getTime() <= currEndingDate.getTime())
+        // console.log(start.getTime(), currStartingDate.getTime(), currEndingDate.getTime())
+        // console.log(start.getTime() >= currStartingDate.getTime() && start.getTime() <= currEndingDate.getTime())
 
         if (start.getTime() >= currStartingDate.getTime() && start.getTime() <= currEndingDate.getTime()) {
             errors.startDate = "Start date conflicts with an existing booking";
@@ -463,7 +526,7 @@ router.post('/:spotId/bookings', requireAuth, validateDates, async (req, res, ne
             if (end.getTime() >= currStartingDate.getTime() && end.getTime() <= currEndingDate.getTime()) {
                 errors.endDate = "End date conflicts with an existing booking";
             }
-            res.status(403).json({message: "Sorry, this spot is already booked for the specified dates", errors})
+            res.status(403).json({ message: "Sorry, this spot is already booked for the specified dates", errors })
         }
         // Start date CANNOT be...
         // after startDate AND before endDate

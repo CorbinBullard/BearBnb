@@ -23,7 +23,7 @@ router.get('/current', requireAuth, async (req, res) => {
         include: [{ model: User, attributes: ['id', 'firstName', 'lastName'] },
         { model: Spot, attributes: { exclude: ['createdAt', 'updatedAt', 'description'] } }]
     })
-    console.log("REVIEWS :  ", getReviews)
+    // console.log("REVIEWS :  ", getReviews)
 
     for (let i = 0; i < getReviews.length; i++) {
         const review = getReviews[i];
