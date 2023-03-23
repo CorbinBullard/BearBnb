@@ -8,6 +8,7 @@ let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
+options.tableName = 'Users'
 
 /** @type {import('sequelize-cli').Migration} */
 
@@ -24,7 +25,6 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   options.tableName = 'Users'
    await queryInterface.bulkInsert(options, [
     {
       email: 'demo@user.io',
@@ -65,7 +65,7 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    options.tableName = 'Users';
+    
     await queryInterface.bulkDelete(options, {
       username: { [Op.in]: ['DemoUser', 'FakeUser1', 'FakeUser2', 'FakeUser3'] }
     }, {});

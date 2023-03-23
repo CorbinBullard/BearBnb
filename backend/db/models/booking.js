@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       //User
       Booking.belongsTo(models.User, { foreignKey: 'userId' })
       //Spot
-      Booking.belongsTo(models.Spot, { foreignKey: 'spotId' })
+      Booking.belongsTo(models.Spot, { foreignKey: 'spotId', onDelete: 'CASCADE' })
     }
   }
   Booking.init({
@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     spotId: {
       type: DataTypes.INTEGER,
-      references: { model: 'Spot' }
+      references: { model: 'Spot' },
+      onDelete: 'CASCADE'
     },
     userId: {
       type: DataTypes.INTEGER,

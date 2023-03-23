@@ -90,7 +90,8 @@ router.get('/:spotId', async (req, res) => {
         attributes: ['id', 'url', 'preview']
     })
 
-    const Owner = await spot.getUser({ attributes: ['id', 'firstName', 'lastName'] })
+    const owner = await spot.getUser({ attributes: ['id', 'firstName', 'lastName'] });
+    console.log(owner.toJSON())
 
     let spotObj = {
         id: spot.id,
@@ -107,9 +108,9 @@ router.get('/:spotId', async (req, res) => {
         createdAt: spot.createdAt,
         updatedAt: spot.updatedAt,
         numReviews: count,
-        avgRating: sum / count,
+        avgStarRating: sum / count,
         SpotImages: url,
-        Owner: Owner
+        Owner: owner
     }
 
     res.json(spotObj);
