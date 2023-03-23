@@ -118,10 +118,10 @@ router.get('/:spotId', async (req, res) => {
 //Get ALL Spots ===============>
 const validateQueries = [
     check('page')
-        .custom((value, {req}) => value > 0)
+        .custom((value, { req }) => value > 0)
         .withMessage("Page must be greater than or equal to 1"),
     check('size')
-        .custom((value, {req}) => value > 0)
+        .custom((value, { req }) => value > 0)
         .withMessage("Size must be greater than or equal to 1"),
     // check('maxLat')
     //     .custom((value, { req }) => typeof value === 'number')
@@ -139,7 +139,7 @@ router.get('/', async (req, res) => {
     const where = {};
 
     const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
-    
+
     //ERROR CHECK
     if (page && page < 1) errors.page = "Page must be greater than or equal to 1";
     if (size && size < 1) errors.size = "Size must be greater than or equal to 1";
@@ -160,18 +160,22 @@ router.get('/', async (req, res) => {
 
 
     // where filters
-    if (minLat) {
-        where.lat = { [Op.gte]: minLat }
-    }
-    if (maxLat) {
-        where.lat = { [Op.lte]: maxLat }
+    if (minLat && maxLat) where.lat = { [Op.between]: [minLat, maxLat] }
+    else {
+        if (minLat) where.lat = { [Op.gte]: minLat }
+        if (maxLat) where.lat = { [Op.lte]: maxLat }
     }
 
-    if (minLng) where.lng = { [Op.gte]: minLng }
-    if (maxLng) where.lng = { [Op.lte]: maxLng }
-
-    if (minPrice) where.price = { [Op.gte]: minPrice }
-    if (maxPrice) where.price = { [Op.lte]: maxPrice }
+    if (minLng && maxLng) where.lng = { [Op.between]: [minLng, maxLng] }
+    else {
+        if (minLng) where.lng = { [Op.gte]: minLng }
+        if (maxLng) where.lng = { [Op.lte]: maxLng }
+    }
+    if (minPrice && maxPrice) where.price = { [Op.between]: [minPrice, maxPrice] }
+    else {
+        if (minPrice) where.price = { [Op.gte]: minPrice }
+        if (maxPrice) where.price = { [Op.lte]: maxPrice }
+    }
 
     //Check errors object
     if (Object.keys(errors).length) return res.status(400).json({ message: "Bad request", errors })
