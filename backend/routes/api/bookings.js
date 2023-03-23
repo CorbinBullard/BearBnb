@@ -16,22 +16,24 @@ router.get('/current', requireAuth, async (req, res) => {
     const bookings = await Booking.findAll({
 
         where: { userId: user.id },
-        include: { model: Spot, attributes: {exclude: ['createdAt', 'updatedAt']} }
+        include: { model: Spot, attributes: { exclude: ['createdAt', 'updatedAt', 'description'] } }
     });
     // console.log(bookings)
-    if (!bookings.length) return res.json({Bookings: []})
+    if (!bookings.length) return res.json({ Bookings: [] })
 
     for (let i = 0; i < bookings.length; i++) {
         const booking = bookings[i];
 
         const previewImg = await SpotImage.findOne({
             attributes: ['url'],
-            where: {spotId: booking.Spot.dataValues.id,
-            preview: true}
+            where: {
+                spotId: booking.Spot.dataValues.id,
+                preview: true
+            }
         })
         let spotObj;
         if (previewImg) {
-             spotObj = {
+            spotObj = {
                 ...booking.Spot.dataValues,
                 previewImage: previewImg.url
 
@@ -74,14 +76,14 @@ validateDates = [
 
 router.put('/:bookingId', requireAuth, validateDates, async (req, res) => {
 
-    const {user} = req;
+    const { user } = req;
     const booking = await Booking.findByPk(req.params.bookingId);
-    const {startDate, endDate} = req.body;
+    const { startDate, endDate } = req.body;
     const errors = {}
     const [start, end] = [new Date(startDate), new Date(endDate)]
 
     if (!booking) return res.status(404).json({ message: "Booking couldn't be found" });
-    if (booking.dataValues.userId !== user.id) res.json({message: "forbidden"});
+    if (booking.dataValues.userId !== user.id) res.json({ message: "forbidden" });
     const spot = await booking.getSpot();
     //Check if start Date is AFTER endDate
     if (start.getTime() > end.getTime()) {
@@ -93,7 +95,7 @@ router.put('/:bookingId', requireAuth, validateDates, async (req, res) => {
     const currEndingDate = new Date(booking.dataValues.endDate);
 
     // Check if current Spot is already booked
-    const currentBookings = await spot.getBookings({where:{id: {[Op.not]: booking.dataValues.id}}});
+    const currentBookings = await spot.getBookings({ where: { id: { [Op.not]: booking.dataValues.id } } });
 
     // console.log(booking.dataValues.id)
 
@@ -117,7 +119,7 @@ router.put('/:bookingId', requireAuth, validateDates, async (req, res) => {
 
     const now = new Date(Date.now());
 
-    if (now.getTime() > currEndingDate.getTime()) return res.json({ message: "Past bookings can't be modified"})
+    if (now.getTime() > currEndingDate.getTime()) return res.json({ message: "Past bookings can't be modified" })
 
     if (Object.keys(errors).length) return res.status()
 
@@ -132,12 +134,12 @@ router.put('/:bookingId', requireAuth, validateDates, async (req, res) => {
 
 // Delete a booking from BookingId =============>
 router.delete('/:bookingId', requireAuth, async (req, res) => {
-    const {user} = req;
+    const { user } = req;
     const booking = await Booking.findByPk(req.params.bookingId);
 
-    if (!booking) return res.status(404).json({message: "Booking couldn't be found"});
+    if (!booking) return res.status(404).json({ message: "Booking couldn't be found" });
 
-    if (booking.dataValues.userId !== user.id) return res.json({message: "forbidden"});
+    if (booking.dataValues.userId !== user.id) return res.json({ message: "forbidden" });
 
     const now = new Date(Date.now());
 
@@ -145,7 +147,7 @@ router.delete('/:bookingId', requireAuth, async (req, res) => {
 
     await booking.destroy();
 
-    res.json({message: "Successfully deleted"})
+    res.json({ message: "Successfully deleted" })
 })
 
 
