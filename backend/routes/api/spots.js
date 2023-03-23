@@ -11,7 +11,7 @@ const { check } = require('express-validator');
 
 
 //Get Spots From Current User ===============>
-router.get('/current', async (req, res) => {
+router.get('/current', requireAuth, async (req, res) => {
 
     const { user } = req;
 
@@ -284,9 +284,11 @@ const validateNewSpot = [
         .withMessage('Country is required'),
     check('lat')
         .exists({ checkFalsy: true, validData: true })
+        .isNumeric()
         .withMessage('Latitude is not valid'),
     check('lng')
         .exists({ checkFalsy: true, validData: true })
+        .isNumeric()
         .withMessage('Longitude is not valid'),
     check('name')
         .exists({ checkFalsy: true })
@@ -297,6 +299,7 @@ const validateNewSpot = [
         .withMessage('Description is required'),
     check('price')
         .exists({ checkFalsy: true })
+        .isNumeric()
         .withMessage('Price per day is required'),
     handleValidationErrors
 
@@ -323,6 +326,7 @@ router.post('/', requireAuth, validateNewSpot, async (req, res) => {
         ownerId: user.id
 
     })
+
     res.status(201).json(newSpot)
 })
 
@@ -411,6 +415,10 @@ router.post('/:spotId/reviews', requireAuth, validReviewData, async (req, res) =
 
     const spot = await Spot.findByPk(req.params.spotId);
     if (!spot) return res.status(404).json({ message: "Spot couldn't be found" });
+
+    const pastReviews = await spot.getReviews({ where: { userId: user.id } });
+
+    if (pastReviews.length) return res.status(403).json({ message: "User already has a review for this spot" })
 
     const newReview = await spot.createReview({
         review,
@@ -503,7 +511,7 @@ router.post('/:spotId/bookings', requireAuth, validateDates, async (req, res, ne
     // Check if Valid Spot
     if (!spot) return res.status(404).json({ message: "Spot couldn't be found" });
     // Check if User OWNS this Spot
-    if (spot.dataValues.ownerId === user.id) return res.json({ message: "Cannot book your own Spot" })
+    if (spot.dataValues.ownerId === user.id) return res.status(403).json({ message: "Cannot book your own Spot" })
     // Check if end Date is after start Date
     // console.log(start.getTime(), end.getTime())
 
