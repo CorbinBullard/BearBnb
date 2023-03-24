@@ -13,10 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
 
       // User
-      Spot.belongsTo(models.User, { foreignKey: 'ownerId' })
+      Spot.belongsTo(models.User, { foreignKey: 'ownerId', onDelete: 'CASCADE' })
 
       //Bookings
-      Spot.hasMany(models.Booking, {foreignKey: 'spotId', onDelete: 'CASCADE'})
+      Spot.hasMany(models.Booking, { foreignKey: 'spotId', onDelete: 'CASCADE' })
       Spot.belongsToMany(models.User, {
         through: 'Booking',
         foreignKey: 'spotId',
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       })
 
       // Reviews
-      Spot.hasMany(models.Review, {foreignKey: 'spotId', onDelete: 'CASCADE'})
+      Spot.hasMany(models.Review, { foreignKey: 'spotId', onDelete: 'CASCADE' })
       Spot.belongsToMany(models.User, {
         through: 'Review',
         foreignKey: 'spotId',
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       })
 
       //Spot Images
-      Spot.hasMany(models.SpotImage, { foreignKey: 'spotId'})
+      Spot.hasMany(models.SpotImage, { foreignKey: 'spotId', onDelete: 'CASCADE' })
     }
   }
   Spot.init({
