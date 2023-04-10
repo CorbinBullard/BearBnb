@@ -1,0 +1,48 @@
+#spot-details-container {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    margin: auto;
+    max-width: 1000px;
+    align-self: center;
+}
+
+.name-location {
+    border: 1px black solid;
+}
+
+#photo-container {
+    border: 1px black solid;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    height: 300px;
+    gap: 5px;
+}
+
+#details-booking-container {
+    display: flex;
+}
+
+.name-description {
+    width: 70%;
+}
+
+#booking-container {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.price-stars {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+#reviews-container {
+    border-top: 1px solid black ;
+}
+
+.review-card {
+border: 1px solid black;
+}
