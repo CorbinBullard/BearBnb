@@ -26,6 +26,17 @@ const LoginFormModal = () => {
                 }
             });
     };
+    const handleDemoUserClick = (e) => {
+        e.preventDefault();
+        dispatch(sessionActions.login({ credential: "DemoUser", password: "password" }))
+            .then(closeModal)
+            .catch(async (res) => {
+                const data = await res.json();
+                if (data && data.errors) {
+                    setErrors(data.errors);
+                }
+            });
+    }
 
     return (
         <>
@@ -54,6 +65,9 @@ const LoginFormModal = () => {
                 )}
                 <button type="submit">Log In</button>
             </form>
+            <a className="demo-user-login"
+                onClick={handleDemoUserClick}
+            >Login as Demo User</a>
         </>
     )
 }

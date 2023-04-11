@@ -12,4 +12,12 @@
     list-style: none;
     height: 50px;
     border: 1px solid black;
+    margin: 0px;
+    padding: 0;
+}
+.logo-image {
+    height: 50px;
+}
+.profile-profile-button > i {
+    height: 50px;
 }

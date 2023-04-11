@@ -262,9 +262,6 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
         url: img.url,
         preview: img.preview
     })
-
-
-
 })
 
 //Create Spot ===============>
