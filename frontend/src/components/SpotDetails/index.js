@@ -4,15 +4,16 @@ import { fetchCurrentSpotThunk } from "../../store/spots";
 import { useParams } from "react-router-dom";
 import "./SpotDetails.css"
 import { fetchCurrentSpotReviewsThunk } from "../../store/reviews";
-import { compare } from "bcryptjs";
+
 
 
 const SpotDetails = () => {
+
     const dispatch = useDispatch();
     const params = useParams();
     const spot = useSelector(state => state.spots.singleSpot);
     const reviews = useSelector(state => state.reviews.spot.Reviews)
-    // console.log("PARAMS: ",params)
+    const user = useSelector(state => state.session.user);
 
 
     useEffect(() => {
@@ -26,6 +27,10 @@ const SpotDetails = () => {
     const nonPreviewImgArr = spot.SpotImages.filter(spot => spot.preview === false).slice(4);
     const previewImage = spot.SpotImages.find(image => image.preview === true);
     const previewURL = previewImage ? previewImage.url : "no-url"
+
+
+    const canPostReview = (user && spot.ownerId !== user?.id)
+
 
     return (
         <div id="spot-details-container">
@@ -48,15 +53,16 @@ const SpotDetails = () => {
                 </div>
                 <div className="booking-container">
                     <div className="price-stars">
-                        <p>{spot.price} </p>
+                        <p>${spot.price} night</p>
                         <p><i className="fa-solid fa-star" />{spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "stars"} <i className="fas fa-circle" /> {!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"}</p>
                     </div>
                     <button onClick={() => window.alert("Feature coming soon")}>Reserve</button>
                 </div>
             </div>
             <div id="reviews-container">
-                <h3>{spot?.avgStarRating ? spot.avgStarRating.toFixed(2) : "stars"} {!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"} </h3>
-                {reviews?.map(review => (
+                <h3><i className="fa-solid fa-star" />{spot?.avgStarRating ? spot.avgStarRating.toFixed(2) : ""} {!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"} </h3>
+                {canPostReview && (<button>Post Your Review</button>)}
+                {reviews?.length === 0 ? <p>Be the first to post a review</p> : reviews?.map(review => (
                     <div className="review-card" key={review.id}>
                         <h4 className="review-card-user">{review.User.firstName} {review.User.lastName}</h4>
                         <h5 className="review-card-date">{new Date(review.createdAt).toLocaleDateString()}</h5>
