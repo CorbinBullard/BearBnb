@@ -1,5 +1,15 @@
-.landingPage-spots {
+#landing-page-container {
     display: flex;
+    justify-content: center;
+
+}
+
+.landingPage-spots {
+    width: 60%;
+    display: flex;
+    flex-wrap: wrap;
     gap: 40px;
     list-style: none;
+    margin-top: 30px;
+    padding: 0;
 }

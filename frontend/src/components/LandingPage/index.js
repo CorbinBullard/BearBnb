@@ -15,13 +15,15 @@ const LandingPage = () => {
     if (!spots) return null;
 
     return (
-        <ul className="landingPage-spots">
-            {spots.map(spot => (
-                <li key={spot.id}>
-                    <SpotCard spot={spot} />
-                </li>
-            ))}
-        </ul>
+        <div id="landing-page-container">
+            <ul className="landingPage-spots">
+                {spots.map(spot => (
+                    <li key={spot.id}>
+                        <SpotCard spot={spot} />
+                    </li>
+                ))}
+            </ul>
+        </div>
     )
 }
 export default LandingPage;

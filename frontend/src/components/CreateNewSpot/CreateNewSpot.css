@@ -1,0 +1,20 @@
+#create-new-spot-form {
+    /* border: 1px black solid; */
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.form-errors {
+    color: red;
+    margin: 0;
+    font-size: small;
+}
+
+#description-input {
+    width: 98%;
+    height: 80px;
+}
+
+

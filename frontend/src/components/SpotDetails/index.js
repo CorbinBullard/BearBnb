@@ -4,12 +4,17 @@ import { fetchCurrentSpotThunk } from "../../store/spots";
 import { useParams } from "react-router-dom";
 import "./SpotDetails.css"
 import { fetchCurrentSpotReviewsThunk } from "../../store/reviews";
+
+
+
 const SpotDetails = () => {
+
     const dispatch = useDispatch();
     const params = useParams();
     const spot = useSelector(state => state.spots.singleSpot);
     const reviews = useSelector(state => state.reviews.spot.Reviews)
-    // console.log("PARAMS: ",params)
+    const user = useSelector(state => state.session.user);
+
 
     useEffect(() => {
         console.log("SPOT DETAILS USE EFFECT")
@@ -19,6 +24,12 @@ const SpotDetails = () => {
 
     if (!Object.entries(spot).length) return null;
 
+    const nonPreviewImgArr = spot.SpotImages.filter(spot => spot.preview === false).slice(4);
+    const previewImage = spot.SpotImages.find(image => image.preview === true);
+    const previewURL = previewImage ? previewImage.url : "no-url"
+
+
+    const canPostReview = (user && spot.ownerId !== user?.id)
 
 
     return (
@@ -28,10 +39,10 @@ const SpotDetails = () => {
                 <h4 className="spot-location">{spot.city}, {spot.state}, {spot.country}</h4>
             </div>
             <div id="photo-container">
-                <img className="previewImage" src={spot.SpotImages.find(image => image.preview === true)} alt="previewImage" />
-                <div className="otherImages">
-                    {spot.SpotImages.map(spot => (
-                        <img src={spot.url} />
+                {<img id="previewImage" src={previewURL} alt="previewImage" />}
+                <div id="otherImages">
+                    {nonPreviewImgArr.map(spot => (
+                        <img className="non-preview-image" src={spot.url} />
                     ))}
                 </div>
             </div>
@@ -42,15 +53,16 @@ const SpotDetails = () => {
                 </div>
                 <div className="booking-container">
                     <div className="price-stars">
-                        <p>{spot.price}</p>
-                        <p>{spot.avgStarRating ? spot.avgStarRating : "stars"} {spot.numReviews ? spot.numReviews + " reviews" : "New"}</p>
+                        <p>${spot.price} night</p>
+                        <p><i className="fa-solid fa-star" />{spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "stars"} <i className="fas fa-circle" /> {!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"}</p>
                     </div>
-                    <button>Reserve</button>
+                    <button onClick={() => window.alert("Feature coming soon")}>Reserve</button>
                 </div>
             </div>
             <div id="reviews-container">
-                <h3>{spot?.avgStarRating ? spot.avgStarRating : "stars"} {spot.numReviews} reviews</h3>
-                {reviews?.map(review => (
+                <h3><i className="fa-solid fa-star" />{spot?.avgStarRating ? spot.avgStarRating.toFixed(2) : ""} {!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"} </h3>
+                {canPostReview && (<button>Post Your Review</button>)}
+                {reviews?.length === 0 ? <p>Be the first to post a review</p> : reviews?.map(review => (
                     <div className="review-card" key={review.id}>
                         <h4 className="review-card-user">{review.User.firstName} {review.User.lastName}</h4>
                         <h5 className="review-card-date">{new Date(review.createdAt).toLocaleDateString()}</h5>

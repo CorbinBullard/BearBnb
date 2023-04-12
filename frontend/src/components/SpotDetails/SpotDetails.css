@@ -13,10 +13,8 @@
 
 #photo-container {
     border: 1px black solid;
-    display: grid;
-    grid-template-columns: 50% 50%;
-    height: 300px;
-    gap: 5px;
+    display: flex;
+    height: 320px;
 }
 
 #details-booking-container {
@@ -45,4 +43,23 @@
 
 .review-card {
 border: 1px solid black;
+}
+
+#previewImage {
+    grid-area: "preview";
+    object-fit: cover;
+    width: 50%;
+    height: 100%;
+
+}
+#otherImages {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+}
+.non-preview-image {
+    width: 50%;
+    height: 50%;
 }
