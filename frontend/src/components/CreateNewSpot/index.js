@@ -82,8 +82,6 @@ const CreateNewSpot = () => {
 
         spot.then((spot) => submitImages(spot.id));
 
-
-
         spot.then(spot => {
             console.log(spot.id);
             history.push(`/spots/${spot.id}`)

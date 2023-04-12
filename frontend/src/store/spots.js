@@ -4,7 +4,7 @@ const LOAD_ALL_SPOTS = 'spots/loadAllSpots';
 const LOAD_CURRENT_SPOT = 'spots/loadCurrentSpot';
 const CREATE_NEW_SPOT = 'spots/createNewSpot';
 const CREATE_NEW_SPOT_IMAGE = 'spots/createNewSpotImage';
-
+const DELETE_SPOT = 'spots/deleteSpot'
 // =============== LOAD ALL SPOTS =============== //
 const loadSpots = (spots) => {
     return {
@@ -67,23 +67,45 @@ export const fetchCurrentUserSpots = () => async dispatch => {
         dispatch(loadSpots(spots))
     }
 }
+// =============== DELETE CURRENT SPOT =============== //
+const deleteSpot = spotId => {
+    return {
+        type: DELETE_SPOT,
+        spotId
+    }
+}
+export const deleteCurrentSpotThunk = spotId => async dispatch => {
+    const res = await csrfFetch(`/api/spots/${spotId}`, {
+        method: 'DELETE'
+    });
+    if (res.ok) {
+        dispatch(deleteSpot(spotId))
+    }
+}
 
 
-const initialState = {allSpots: [], singleSpot: {}};
+const initialState = {allSpots: {}, singleSpot: {}};
 
 
 const spotReducer = (state = initialState, action) => {
     switch(action.type) {
         case LOAD_ALL_SPOTS: {
             // const newState = {...state};
-            const newState = {...state, singleSpot: {}};
-
-            newState.allSpots = action.spots.Spots;
+            const newState = {...state, allSpots: {}, singleSpot: {}};
+            action.spots.Spots.forEach(spot => {
+                newState.allSpots[spot.id] = spot
+            });
+            // newState.allSpots = action.spots.Spots;
             return newState;
         }
         case LOAD_CURRENT_SPOT: {
             const newState = {...state, singleSpot: {}};
             newState.singleSpot = action.spot;
+            return newState;
+        }
+        case DELETE_SPOT: {
+            const newState = {allSpots: { ...state.allSpots }, singleSpot: {} }
+            delete newState.allSpots[action.spotId];
             return newState;
         }
         default:

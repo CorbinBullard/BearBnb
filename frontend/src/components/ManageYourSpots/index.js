@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCurrentUserSpots } from "../../store/spots";
+import { deleteCurrentSpotThunk, fetchCurrentUserSpots } from "../../store/spots";
 import SpotCard from "../SpotCard";
 import { useHistory } from "react-router-dom";
 
@@ -16,6 +16,9 @@ const ManageYourSpots = () => {
     const createSpot = () => {
         history.push("/spots/new");
     }
+    const handleDeleteSpot = (spotId) => {
+        dispatch(deleteCurrentSpotThunk(spotId));
+    }
 
     if (!spots.length) return null
     return (
@@ -28,7 +31,7 @@ const ManageYourSpots = () => {
                         <SpotCard spot={spot} />
                         <div className="manage-spot-buttons">
                             <button>Update</button>
-                            <button>Delete</button>
+                            <button onClick={() => handleDeleteSpot(spot.id)}>Delete</button>
                         </div>
                     </div>
                 ))}
