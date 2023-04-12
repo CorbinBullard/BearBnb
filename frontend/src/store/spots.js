@@ -54,23 +54,19 @@ export const postNewSpotThunk = (spot) => async (dispatch) => {
     })
     if (res.ok) {
         const spot = await res.json();
-        
+
         return spot;
     }
 }
 
-// =============== CREATE NEW SPOT IMAGE =============== //
-const createNewSpotImage = (image) => {
-    return {
-        type: CREATE_NEW_SPOT_IMAGE,
-        image
+// =============== GET CURRENT USERS SPOTS =============== //
+export const fetchCurrentUserSpots = () => async dispatch => {
+    const res = await csrfFetch('/api/spots/current');
+    if (res.ok) {
+        const spots = await res.json();
+        dispatch(loadSpots(spots))
     }
 }
-
-// export const postNewSpotImageThunk = (image) => async dispatch => {
-//     const {url, preview} = image;
-//     const res = await csrfFetch('')
-// }
 
 
 const initialState = {allSpots: [], singleSpot: {}};
@@ -79,16 +75,14 @@ const initialState = {allSpots: [], singleSpot: {}};
 const spotReducer = (state = initialState, action) => {
     switch(action.type) {
         case LOAD_ALL_SPOTS: {
-            const newState = {...state};
+            // const newState = {...state};
+            const newState = {...state, singleSpot: {}};
 
-            // action.spots.Spots.forEach(spot => {
-            //     newState.allSpots[spot.id]
-            // });
             newState.allSpots = action.spots.Spots;
             return newState;
         }
         case LOAD_CURRENT_SPOT: {
-            const newState = {...state};
+            const newState = {...state, singleSpot: {}};
             newState.singleSpot = action.spot;
             return newState;
         }

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux";
 import "./SpotCard.css"
-import {useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 const SpotCard = ({ spot }) => {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -25,20 +25,24 @@ const SpotCard = ({ spot }) => {
 
     return (
         <div
-        className="spotCard-container"
-        onMouseEnter={showTooltip}
-        onMouseLeave={hideTooltip}
-        onClick={handleClick}
+            className="spotCard-container"
+            onMouseEnter={showTooltip}
+            onMouseLeave={hideTooltip}
+            onClick={handleClick}
         >
             <img src={spot.previewImage} className="spotCard-image" alt={spot.previewImage} />
             <div className="spotCard-info">
                 <div className="SpotCard-cityState-stars">
                     <p className="spotCard-city-state">{spot.city}, {spot.state}</p>
-                    <p className="spotCard-stars">{spot.avgRating ? spot.avgRating : "Stars"}</p>
+                    <p className="spotCard-stars"><i className="fa fa-star"></i> {spot.avgRating ? spot.avgRating : "New"}</p>
                 </div>
                 <p className="spotCard-price">{spot.price}</p>
             </div>
-            {tooltipActive && <p className="tooltip">{spot.name}</p>}
+            {tooltipActive && <div className="tooltip">
+                <span className="tooltiptext">
+                    {spot.name}
+                </span>
+            </div>}
         </div>
     )
 }

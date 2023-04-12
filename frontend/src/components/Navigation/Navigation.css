@@ -4,6 +4,11 @@
 
 .profile-dropdown {
     list-style-type: none;
+    z-index: 2;
+    /* background-color: white; */
+    position: relative;
+    border: 1px solid black;
+    background-color: white;
 }
 
 #nav-container {
@@ -14,6 +19,7 @@
     border: 1px solid black;
     margin: 0px;
     padding: 0;
+    z-index: 2;
 }
 .logo-image {
     height: 50px;

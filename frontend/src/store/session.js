@@ -37,7 +37,7 @@ const removeUser = () => {
 }
 
 export const logout = () => async (dispatch) => {
-    const res = await csrfFetch('api/session', {
+    const res = await csrfFetch('/api/session', {
         method: 'DELETE'
     });
     if (res.ok) {

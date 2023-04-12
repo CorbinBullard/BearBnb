@@ -95,25 +95,25 @@ const CreateNewSpot = () => {
             body: JSON.stringify({ url: preview, preview: true })
         })
         if (img1) {
-            await csrfFetch(`/api/${id}/images`, {
+            await csrfFetch(`/api/spots/${id}/images`, {
                 method: 'POST',
                 body: JSON.stringify({ url: img1, preview: false })
             })
         }
         if (img2) {
-            await csrfFetch(`/api/${id}/images`, {
+            await csrfFetch(`/api/spots/${id}/images`, {
                 method: 'POST',
                 body: JSON.stringify({ url: img2, preview: false })
             })
         }
         if (img3) {
-            await csrfFetch(`/api/${id}/images`, {
+            await csrfFetch(`/api/spots/${id}/images`, {
                 method: 'POST',
                 body: JSON.stringify({ url: img3, preview: false })
             })
         }
         if (img4) {
-            await csrfFetch(`/api/${id}/images`, {
+            await csrfFetch(`/api/spots/${id}/images`, {
                 method: 'POST',
                 body: JSON.stringify({ url: img4, preview: false })
             })
