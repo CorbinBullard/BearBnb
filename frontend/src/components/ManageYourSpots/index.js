@@ -19,7 +19,9 @@ const ManageYourSpots = () => {
     const handleDeleteSpot = (spotId) => {
         dispatch(deleteCurrentSpotThunk(spotId));
     }
-
+    const handleUpdate = spotId => {
+        history.push(`/spots/${spotId}/edit`);
+    }
     if (!spots.length) return null
     return (
         <>
@@ -30,7 +32,7 @@ const ManageYourSpots = () => {
                     <div className="manage-spot-container">
                         <SpotCard spot={spot} />
                         <div className="manage-spot-buttons">
-                            <button>Update</button>
+                            <button onClick={() => handleUpdate(spot.id)}>Update</button>
                             <button onClick={() => handleDeleteSpot(spot.id)}>Delete</button>
                         </div>
                     </div>

@@ -82,6 +82,7 @@ export const deleteCurrentSpotThunk = spotId => async dispatch => {
         dispatch(deleteSpot(spotId))
     }
 }
+// =============== UPDATE CURRENT SPOT =============== //
 
 
 const initialState = {allSpots: {}, singleSpot: {}};
