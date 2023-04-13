@@ -6,8 +6,7 @@ import App from './App';
 import configureStore from './store';
 import { restoreCSRF, csrfFetch } from './store/csrf';
 import { Modal, ModalProvider } from './context/Modal';
-import { Provider, Provider as ReduxProvider } from 'react-redux';
-import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
 
 import * as sessionActions from "./store/session";
 

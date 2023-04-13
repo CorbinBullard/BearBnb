@@ -6,6 +6,7 @@ import { deleteReviewThunk, fetchCurrentSpotReviewsThunk } from "../../store/rev
 import OpenModalButton from "../OpenModalButton";
 import NewReviewModal from "../NewReviewModal";
 import "./SpotDetails.css"
+import DeleteReviewModal from "./DeleteReviewModal";
 
 
 
@@ -26,12 +27,12 @@ const SpotDetails = () => {
     }, [dispatch, params.spotId])
 
     const handleDeleteComment = commentId => {
-        console.log(commentId);
+
         dispatch(deleteReviewThunk(commentId));
     }
 
 
-    if (!Object.entries(spot).length) return null;
+    if (!Object.entries(spot).length || !spot.SpotImages) return null;
 
 
     // const reviews = Object.values(reviews);
@@ -75,14 +76,16 @@ const SpotDetails = () => {
                 {canPostReview && (<OpenModalButton
                     buttonText="Post Your Review"
                     modalComponent={<NewReviewModal spot={spot} />}
-
                 />)}
-                {reviews?.length === 0 && canPostReview ? <p>Be the first to post a review</p> : reviews?.map(review => (
+                {reviews?.length === 0 && canPostReview ? <p>Be the first to post a review</p> : reviews?.reverse().map(review => (
                     <div className="review-card" key={review.id}>
                         <h4 className="review-card-user">{review.User?.firstName} {review.User?.lastName}</h4>
                         <h5 className="review-card-date">{new Date(review.createdAt).toLocaleDateString()}</h5>
                         <p className="review-card-review">{review.review}</p>
-                        {review.User?.id === user?.id && <button className="delete-comment" onClick={()=> handleDeleteComment(review.id)}>Delete</button>}
+                        {review.User?.id === user?.id && <OpenModalButton
+                            modalComponent={<DeleteReviewModal review={review} />}
+                            buttonText="Delete"
+                        />}
                     </div>
                 ))}
             </div>

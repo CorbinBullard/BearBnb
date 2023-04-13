@@ -1,27 +1,32 @@
-import { useEffect, useState } from "react";
-import "./CreateNewSpot.css"
-import { useDispatch } from "react-redux";
-import { postNewSpotThunk } from "../../store/spots";
-import { csrfFetch } from "../../store/csrf";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { fetchCurrentSpotThunk } from "../../store/spots";
 
-const CreateNewSpot = () => {
-    const [country, setCountry] = useState('');
-    const [address, setAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [lat, setLat] = useState('');
-    const [lng, setLng] = useState('');
-    const [description, setDescription] = useState('');
-    const [name, setName] = useState('');
-    const [price, setPrice] = useState(0);
+const SpotForm = ({ spot }) => {
 
-    const [preview, setPreview] = useState('');
-    const [img1, setImg1] = useState('');
+    const params = useParams();
+    const spotId = params.id;
+
+    console.log("SPOT: ", spot)
+
+    const [country, setCountry] = useState(spot.country);
+    const [address, setAddress] = useState(spot.address);
+    const [city, setCity] = useState(spot.city);
+    const [state, setState] = useState(spot.state);
+    const [lat, setLat] = useState(spot.lat);
+    const [lng, setLng] = useState(spot.lng);
+    const [description, setDescription] = useState(spot.description);
+    const [name, setName] = useState(spot.name);
+    const [price, setPrice] = useState(spot.price);
+
+    const [preview, setPreview] = useState(spot.preview);
+    const [img1, setImg1] = useState(spot.img1);
     const [img2, setImg2] = useState('');
     const [img3, setImg3] = useState('');
     const [img4, setImg4] = useState('');
-
+    console.log(spot)
     const [errors, setErrors] = useState({});
     const [submitWithErrors, setSubmitWithErrors] = useState(false);
     const dispatch = useDispatch();
@@ -29,6 +34,12 @@ const CreateNewSpot = () => {
     const history = useHistory();
 
     useEffect(() => {
+        dispatch(fetchCurrentSpotThunk(spotId));
+    }, [dispatch, params.id])
+
+
+    useEffect(() => {
+        console.log("FORM EFFECT")
         const errorsObj = {}
         if (!country) errorsObj.country = "Country is required";
         if (!address) errorsObj.address = "Address is required";
@@ -36,10 +47,9 @@ const CreateNewSpot = () => {
         if (!state) errorsObj.state = "State is required";
         if (!lat) errorsObj.lat = "Latitude is required";
         if (!lng) errorsObj.lng = "Longitude is required";
-        if (description.length < 30) errorsObj.description = "Description needs a minimum of 30 characters";
+        if (description?.length < 30) errorsObj.description = "Description needs a minimum of 30 characters";
         if (!name) errorsObj.name = "Name is required";
         if (!price) errorsObj.price = "Price is required";
-        if (price &&  isNaN(+price)) errorsObj.price = "Price must be a number";
         if (!preview) errorsObj.preview = "Preview image is required";
         if (preview && !isValidUrl(preview)) errorsObj.preview = "Image URL must end in .png, .jpg, or .jpeg";
         if (img1 && !isValidUrl(img1)) errorsObj.img1 = "Image URL must end in .png, .jpg, or .jpeg";
@@ -50,7 +60,7 @@ const CreateNewSpot = () => {
         setErrors(errorsObj);
 
 
-    }, [country, address, city, state, lat, lng, description, name, price, preview, img1, img2, img3, img4])
+    }, [country, address, city, state, lat, lng, description, name, price])
 
     const isValidUrl = (url) => {
         const imageFormatTypes = ['jpg', 'jpeg', 'png'];
@@ -61,68 +71,10 @@ const CreateNewSpot = () => {
             return false
         };
     }
-
-    const handleSubmit = async e => {
-        e.preventDefault();
-        if (Object.values(errors).length) {
-            setSubmitWithErrors(true);
-            return window.alert("Cannot Submit");
-        }
-        const newSpot = {
-            address,
-            city,
-            state,
-            country,
-            lat,
-            lng,
-            name,
-            description,
-            price
-        }
-        const spot = new Promise((resolve, reject) => resolve(dispatch(postNewSpotThunk(newSpot))));
-
-        spot.then((spot) => submitImages(spot.id));
-
-        spot.then(spot => {
-            console.log(spot.id);
-            history.push(`/spots/${spot.id}`)
-        });
-    }
-    const submitImages = async (id) => {
-        await csrfFetch(`/api/spots/${id}/images`, {
-            method: 'POST',
-            body: JSON.stringify({ url: preview, preview: true })
-        })
-        if (img1) {
-            await csrfFetch(`/api/spots/${id}/images`, {
-                method: 'POST',
-                body: JSON.stringify({ url: img1, preview: false })
-            })
-        }
-        if (img2) {
-            await csrfFetch(`/api/spots/${id}/images`, {
-                method: 'POST',
-                body: JSON.stringify({ url: img2, preview: false })
-            })
-        }
-        if (img3) {
-            await csrfFetch(`/api/spots/${id}/images`, {
-                method: 'POST',
-                body: JSON.stringify({ url: img3, preview: false })
-            })
-        }
-        if (img4) {
-            await csrfFetch(`/api/spots/${id}/images`, {
-                method: 'POST',
-                body: JSON.stringify({ url: img4, preview: false })
-            })
-        }
-    }
+    if (!spot) return null;
 
     return (
-        <form id="create-new-spot-form"
-            onSubmit={handleSubmit}>
-            <h2>Create a new Spot</h2>
+        <>
             <h3>Where's your place located?</h3>
             <p>Guests will only get your exact address once they booked a reservation.</p>
             <div className="create-spot-location-container">
@@ -185,8 +137,6 @@ const CreateNewSpot = () => {
                 <input type="text" placeholder="Image URL" onChange={e => setImg4(e.target.value)} value={img4}></input>
                 {submitWithErrors && errors.img4 && <p className="form-errors">{errors.img4}</p>}
             </div>
-            <button>Create Spot</button>
-        </form>
-    )
+        </>)
 }
-export default CreateNewSpot;
+export default SpotForm
