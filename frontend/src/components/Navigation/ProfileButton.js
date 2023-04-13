@@ -4,8 +4,8 @@ import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
-import './Navigation.css';
 import { NavLink, useHistory } from "react-router-dom";
+import './Navigation.css';
 
 function ProfileButton({ user }) {
     const history = useHistory();
@@ -49,9 +49,9 @@ function ProfileButton({ user }) {
 
     return (
         <>
-            <a onClick={openMenu} className="profile-profile-button">
-                <i className="fas fa-user-circle" />
-            </a>
+            <button onClick={openMenu} className="profile-profile-button">
+                <i id="profile-bars" className="fa fa-bars" /> <i id="profile-icon" className="fa fa-user-circle" />
+            </button>
             <ul className={ulClassName} ref={ulRef}>
                 {user ? (
                     <>
