@@ -86,7 +86,7 @@ const UpdateSpot = () => {
             description,
             price
         }
-        console.log(newSpot);
+        
         dispatch(updateCurrentSpotThunk(newSpot))
         history.push(`spots/${id}`);
     }

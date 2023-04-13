@@ -16,7 +16,7 @@ const DeleteReviewModal = ({ review }) => {
         <>
             <h3>Are you sure you want to delete this Review?</h3>
             <button onClick={deleteReview}>Yes (Delete Review)</button>
-            <button onClick={closeModal}>No (Remove Review)</button>
+            <button onClick={closeModal}>No (Keep Review)</button>
         </>
 
     )
