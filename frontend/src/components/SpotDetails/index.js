@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrentSpotThunk } from "../../store/spots";
 import { useParams } from "react-router-dom";
-import { deleteReviewThunk, fetchCurrentSpotReviewsThunk } from "../../store/reviews";
+import { fetchCurrentSpotReviewsThunk } from "../../store/reviews";
 import OpenModalButton from "../OpenModalButton";
 import NewReviewModal from "../NewReviewModal";
 import "./SpotDetails.css"
+import DeleteReviewModal from "./DeleteReviewModal";
 
 
 
@@ -17,30 +18,40 @@ const SpotDetails = () => {
     const spot = useSelector(state => state.spots.singleSpot);
     const reviews = Object.values(useSelector(state => state.reviews.spot));
     const user = useSelector(state => state.session.user);
-
+    const [hasPosted, setHasPosted] = useState(false);
 
     useEffect(() => {
-
-        dispatch(fetchCurrentSpotThunk(params.spotId))
+        dispatch(fetchCurrentSpotThunk(params.spotId));
         dispatch(fetchCurrentSpotReviewsThunk(params.spotId));
+
     }, [dispatch, params.spotId])
 
-    const handleDeleteComment = commentId => {
-        console.log(commentId);
-        dispatch(deleteReviewThunk(commentId));
-    }
+    useEffect(() => {
+        for (let i = 0; i < reviews.length; i++) {
+            const review = reviews[i];
+            if (review.userId === user.id) return setHasPosted(true);
+        }
+        setHasPosted(false);
+    }, [hasPosted, reviews]);
+    console.log("reviews Array: ", reviews)
 
 
-    if (!Object.entries(spot).length) return null;
+    if (!Object.entries(spot).length || !spot.SpotImages) return null;
 
 
     // const reviews = Object.values(reviews);
-    const nonPreviewImgArr = spot?.SpotImages.filter(spot => spot.preview === false).slice(4);
+    const nonPreviewImgArr = spot?.SpotImages.filter(spot => {
+        console.log(spot.preview)
+        return spot.preview === false
+    });
+    console.log("NON PREV", nonPreviewImgArr);
     const previewImage = spot?.SpotImages.find(image => image.preview === true);
     const previewURL = previewImage ? previewImage.url : "no-url"
 
 
-    const canPostReview = (user && spot.ownerId !== user?.id);
+    const canPostReview = (user && spot.ownerId !== user?.id && !hasPosted);
+
+
 
 
     return (
@@ -75,14 +86,17 @@ const SpotDetails = () => {
                 {canPostReview && (<OpenModalButton
                     buttonText="Post Your Review"
                     modalComponent={<NewReviewModal spot={spot} />}
-
                 />)}
-                {reviews?.length === 0 && canPostReview ? <p>Be the first to post a review</p> : reviews?.map(review => (
+                {reviews?.length === 0 && canPostReview ? <p>Be the first to post a review</p> : reviews?.reverse().map(review => (
                     <div className="review-card" key={review.id}>
                         <h4 className="review-card-user">{review.User?.firstName} {review.User?.lastName}</h4>
                         <h5 className="review-card-date">{new Date(review.createdAt).toLocaleDateString()}</h5>
                         <p className="review-card-review">{review.review}</p>
-                        {review.User?.id === user?.id && <button className="delete-comment" onClick={()=> handleDeleteComment(review.id)}>Delete</button>}
+
+                        {review.User?.id === user.id && <OpenModalButton
+                            modalComponent={<DeleteReviewModal review={review} />}
+                            buttonText="Delete"
+                        />}
                     </div>
                 ))}
             </div>

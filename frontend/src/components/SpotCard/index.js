@@ -36,7 +36,7 @@ const SpotCard = ({ spot }) => {
                     <p className="spotCard-city-state">{spot.city}, {spot.state}</p>
                     <p className="spotCard-stars"><i className="fa fa-star"></i> {spot.avgRating ? spot.avgRating : "New"}</p>
                 </div>
-                <p className="spotCard-price">{spot.price}</p>
+                <p className="spotCard-price">${spot.price} night</p>
             </div>
             {tooltipActive && <div className="tooltip">
                 <span className="tooltiptext">

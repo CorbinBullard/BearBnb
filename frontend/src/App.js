@@ -9,6 +9,7 @@ import LandingPage from "./components/LandingPage";
 import SpotDetails from "./components/SpotDetails";
 import CreateNewSpot from "./components/CreateNewSpot";
 import ManageYourSpots from "./components/ManageYourSpots";
+import UpdateSpot from "./components/UpdateSpot";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,6 +25,9 @@ function App() {
         <Switch>
           <Route exact path={"/"}>
             <LandingPage />
+          </Route>
+          <Route path={"/spots/:id/edit"}>
+            <UpdateSpot />
           </Route>
           <Route path={'/spots/new'}>
             <CreateNewSpot />

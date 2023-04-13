@@ -423,8 +423,12 @@ router.post('/:spotId/reviews', requireAuth, validReviewData, async (req, res) =
         userId: user.id
     })
 
+    const currReview = await Review.findByPk(newReview.id, {
+        attributes: ['id', 'userId', 'spotId', 'review', 'stars', 'createdAt', 'updatedAt'],
+        include: [{ model: User, attributes: ['id', 'firstName', 'lastName'] }]
+    })
 
-    res.json(newReview)
+    res.json(currReview)
 
 })
 

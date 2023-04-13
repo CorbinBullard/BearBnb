@@ -30,10 +30,10 @@ const createNewReview = (review) => {
 }
 
 export const postNewSpotReviewThunk = (newReview) => async (dispatch) => {
-    const {stars, review, spotId} = newReview;
+    const { stars, review, spotId } = newReview;
     const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
         method: 'POST',
-        body: JSON.stringify({stars, review})
+        body: JSON.stringify({ stars, review })
     });
     if (res.ok) {
         const review = await res.json();
@@ -69,19 +69,18 @@ const reviewReducer = (state = initialState, action) => {
             const newState = { ...state };
             newState.spot = {}
             Object.values(action.reviews.Reviews).forEach(review => {
-                console.log("CURR REV",review);
                 newState.spot[review.id] = review;
             });
             return newState;
         }
         case CREATE_NEW_REVIEW: {
-            const newState = {...state, spot: {...state.spot}};
+            const newState = { ...state, spot: { ...state.spot } };
             newState.spot[action.review.id] = action.review;
             return newState;
         }
         case DELETE_REVIEW: {
 
-            const newState = {...state, spot: {...state.spot} }
+            const newState = { ...state, spot: { ...state.spot } }
 
             delete newState.spot[action.reviewId];
             return newState;

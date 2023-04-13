@@ -31,7 +31,7 @@ const NewReviewModal = ({spot}) => {
             setSubmitWithErrors(true);
             return window.alert("Cannot Submit");
         }
-        console.log(review)
+        
 
         const promise = new Promise(resolve => resolve(dispatch(postNewSpotReviewThunk({stars, review, spotId}))))
         promise.then(closeModal)
