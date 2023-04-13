@@ -81,14 +81,16 @@ const CreateNewSpot = () => {
         }
         const spot = new Promise((resolve, reject) => resolve(dispatch(postNewSpotThunk(newSpot))));
 
-        spot.then((spot) => submitImages(spot.id));
+        await spot.then((spot) => submitImages(spot.id));
+
 
         spot.then(spot => {
-            console.log(spot.id);
+
             history.push(`/spots/${spot.id}`)
         });
     }
     const submitImages = async (id) => {
+        console.log("IMAGES", img1, img2, img3, img4)
         await csrfFetch(`/api/spots/${id}/images`, {
             method: 'POST',
             body: JSON.stringify({ url: preview, preview: true })

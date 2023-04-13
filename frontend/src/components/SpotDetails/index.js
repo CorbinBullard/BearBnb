@@ -32,7 +32,7 @@ const SpotDetails = () => {
             if (review.userId === user.id) return setHasPosted(true);
         }
         setHasPosted(false);
-    },[hasPosted, reviews]);
+    }, [hasPosted, reviews]);
     console.log("reviews Array: ", reviews)
 
 
@@ -40,7 +40,11 @@ const SpotDetails = () => {
 
 
     // const reviews = Object.values(reviews);
-    const nonPreviewImgArr = spot?.SpotImages.filter(spot => spot.preview === false).slice(4);
+    const nonPreviewImgArr = spot?.SpotImages.filter(spot => {
+        console.log(spot.preview)
+        return spot.preview === false
+    });
+    console.log("NON PREV", nonPreviewImgArr);
     const previewImage = spot?.SpotImages.find(image => image.preview === true);
     const previewURL = previewImage ? previewImage.url : "no-url"
 
