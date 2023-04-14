@@ -8,23 +8,29 @@
     align-self: center;
 }
 
-.name-location {
-    border: 1px black solid;
+#name-location {
+    /* border: 1px black solid; */
 }
 
+#spot-name {
+    font-size: xxx-large;
+    margin: 0;
+}
+
+
 #photo-container {
-    border: 1px black solid;
+    /* border: 1px black solid; */
     display: flex;
     height: 320px;
+
 }
 
 #details-booking-container {
     display: flex;
+    justify-content: space-between;
+    padding-bottom: 15px;
 }
 
-.name-description {
-    width: 70%;
-}
 
 #booking-container {
     width: 30%;
@@ -32,35 +38,109 @@
     flex-direction: column;
 }
 
-.price-stars {
-    display: flex;
-    justify-content: space-between;
-
+#spot-price {
+    font-weight: bold;
+    font-size: large;
 }
 
 #reviews-container {
-    border-top: 1px solid black ;
+    border-top: 1px solid lightgray;
 }
 
-.review-card {
-border: 1px solid black;
-}
 
 #previewImage {
     grid-area: "preview";
     object-fit: cover;
     width: 50%;
     height: 100%;
-
 }
+
 #otherImages {
     width: 50%;
     height: 100%;
     display: flex;
     flex-wrap: wrap;
-
+    gap: 0px;
 }
+
 .non-preview-image {
     width: 50%;
     height: 50%;
+}
+
+.name-description {
+    width: 70%;
+}
+
+.price-stars {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    align-items: center;
+}
+
+
+#reserve-button {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0px;
+    background-color: rgb(250, 115, 115);
+    color: aliceblue;
+    border-radius: 8px;
+}
+
+#reserve-button:hover {
+    cursor: pointer;
+}
+
+#review-header-stars-review-num {
+    display: flex;
+    gap: 20px;
+    font-size: larger;
+    border-bottom: 1px lightgray solid;
+}
+
+.review-card>h4 {
+    margin: 10px 0;
+}
+
+.review-card>h5 {
+    margin: 10px 0;
+    color: gray;
+}
+
+.review-card>p {
+    margin: 10px 0;
+}
+
+.review-card>button {
+    margin: 10px 0;
+    width: 65px;
+    padding: 3px;
+    font-weight: bold;
+    background-color: rgb(97, 96, 96);
+    color: rgb(240, 240, 240);
+    border-radius: 3px;
+}
+
+/* DLETE REVIEW MODAL */
+#delete-review-modal-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#delete-review-button {
+    padding: 8px;
+    margin: 5px 0px;
+    background-color: rgb(250, 115, 115);
+    color: aliceblue;
+    border-radius: 8px;
+}
+
+#keep-review-button {
+    padding: 8px;
+    margin: 5px 0px;
+    background-color: rgb(97, 96, 96);
+    color: aliceblue;
+    border-radius: 8px;
 }

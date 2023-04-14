@@ -1,0 +1,28 @@
+#sign-up-modal-container {
+    display: flex;
+    flex-direction: column;
+}
+#sign-up-modal-container > form {
+    display: flex;
+    flex-direction: column;
+}
+.sign-up-form-label {
+    display: flex;
+    flex-direction: column;
+}
+.sign-up-form-label > input {
+    height: 20px;
+    margin: 5px 0px;
+}
+
+
+
+
+
+
+
+.errors {
+    color: red;
+    margin: 0;
+    font-size: small;
+}

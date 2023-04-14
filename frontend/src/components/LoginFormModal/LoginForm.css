@@ -1,1 +1,40 @@
+#login-modal-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    height: 240px;
+    justify-content: space-around;
+}
+#login-modal-form-component {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.login-feild-label {
+    display: flex;
+    flex-direction: column;
+}
+.login-feild-label > input {
+    height: 20px;
+    margin: 5px 0px;
+}
+#login-submit {
+    padding: 8px;
+    margin: 5px 0px;
+    background-color: rgb(250, 115, 115);
+    color:aliceblue;
+    border-radius: 8px;
+}
+#login-submit:hover {
+    cursor: pointer;
+}
+#demo-user-login {
+    padding: 8px;
+    border-radius: 15px;
 
+}
+#demo-user-login:hover {
+    background-color: rgb(225, 225, 225);
+    cursor: pointer;
+}

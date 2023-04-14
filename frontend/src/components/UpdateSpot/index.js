@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { csrfFetch } from "../../store/csrf";
 import { fetchCurrentSpotThunk, updateCurrentSpotThunk } from "../../store/spots";
+import "./UpdateSpot.css"
 // import SpotForm from "../SpotForm";
 
 const UpdateSpot = () => {
@@ -45,7 +46,7 @@ const UpdateSpot = () => {
             setPrice(spot.price);
         })
 
-    },[dispatch]);
+    }, [dispatch]);
 
 
     useEffect(() => {
@@ -86,7 +87,7 @@ const UpdateSpot = () => {
             description,
             price
         }
-        
+
         dispatch(updateCurrentSpotThunk(newSpot))
         history.push(`spots/${id}`);
     }
@@ -99,24 +100,28 @@ const UpdateSpot = () => {
             <h2>Update a new Spot</h2>
             <h3>Where's your place located?</h3>
             <p>Guests will only get your exact address once they booked a reservation.</p>
-            <div className="update-spot-location-container">
-                <div className="update-spot-country">
+            <div id="update-spot-location-container">
+                <div id="update-spot-country">
                     <label htmlFor="country">Country </label>
                     {submitWithErrors && errors.country && <p className="form-errors">{errors.country}</p>}
                     <input type="text" placeholder="Country" onChange={e => setCountry(e.target.value)} value={country}></input>
                 </div>
-                <div className="update-spot-address">
+                <div id="update-spot-address">
                     <label htmlFor="address">Street Address</label>
                     {submitWithErrors && errors.address && <p className="form-errors">{errors.address}</p>}
                     <input type="text" placeholder="Address" onChange={e => setAddress(e.target.value)} value={address}></input>
                 </div>
-                <div className="city-state">
-                    <label htmlFor="city">City</label>
-                    {submitWithErrors && errors.city && <p className="form-errors">{errors.city}</p>}
-                    <input type="text" placeholder="City" onChange={e => setCity(e.target.value)} value={city}></input>,
-                    <label htmlFor="State">State</label>
-                    {submitWithErrors && errors.state && <p className="form-errors">{errors.state}</p>}
-                    <input type="text" placeholder="STATE" onChange={e => setState(e.target.value)} value={state}></input>
+                <div id="city-state">
+                    <div id="city-container">
+                        <label htmlFor="city">City</label>
+                        {submitWithErrors && errors.city && <p className="form-errors">{errors.city}</p>}
+                        <input type="text" placeholder="City" onChange={e => setCity(e.target.value)} value={city}></input>,
+                    </div>
+                    <div id="state-container">
+                        <label htmlFor="State">State</label>
+                        {submitWithErrors && errors.state && <p className="form-errors">{errors.state}</p>}
+                        <input type="text" placeholder="STATE" onChange={e => setState(e.target.value)} value={state}></input>
+                    </div>
                 </div>
                 <div className="lat-lng">
                     <label htmlFor="lat">Latitude</label>
@@ -142,11 +147,13 @@ const UpdateSpot = () => {
             <div className="update-spot-price">
                 <h3>Set a base price for your spot</h3>
                 <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
-                $ <input type="text" placeholder="Price per night (USD)" onChange={e => setPrice(e.target.value)} value={price}></input>
+                <div id="price-sign">
+                    <p>$</p> <input type="text" placeholder="Price per night (USD)" onChange={e => setPrice(e.target.value)} value={price}></input>
+                </div>
                 {submitWithErrors && errors.price && <p className="form-errors">{errors.price}</p>}
             </div>
 
-            <button>Update Spot</button>
+            <button id="update-new-spot-form-button">Update Spot</button>
         </form>
     )
 }

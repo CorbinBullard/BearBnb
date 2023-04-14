@@ -5,10 +5,20 @@
 .profile-dropdown {
     list-style-type: none;
     z-index: 2;
-    /* background-color: white; */
-    position: relative;
-    border: 1px solid black;
     background-color: white;
+    position: absolute;
+    top: 14%;
+    right: 10px;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    background-color: white;
+    height: 160px;
+    width: 210px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 0;
 }
 
 #nav-container {
@@ -24,6 +34,10 @@
     margin-bottom: 30px;
 }
 
+#nav-home-button-icon {
+    margin-left: 80px;
+}
+
 .nav-profile-button {
     display: flex;
     width: 250px;
@@ -31,6 +45,44 @@
     align-items: center;
     margin-right: 20px;
 
+}
+#profile-button {
+    justify-self: flex-end;
+}
+#user-name {
+    cursor: default;
+}
+
+#user-email {
+    border-bottom: 1px lightgray solid;
+    padding-bottom: 15px;
+}
+
+#user-email:hover {
+    cursor: default;
+}
+
+#profile-manage-spots {
+    padding: 8px;
+    border-radius: 18px;
+    text-decoration: none;
+    color: black;
+}
+
+#logout {
+    width: 150px;
+    height: 30px;
+    background-color: rgb(250, 115, 115);
+    color: antiquewhite;
+    border-radius: 8px;
+}
+
+#logout:hover {
+    cursor: pointer;
+}
+
+#profile-manage-spots:hover {
+    background-color: rgb(225, 225, 225);
 }
 
 .logo-image {
@@ -41,7 +93,12 @@
 .create-a-new-spot {
     color: black;
     text-decoration: none;
+    padding: 8px;
+    border-radius: 18px;
+}
 
+.create-a-new-spot:hover {
+    background-color: rgb(225, 225, 225);
 }
 
 .profile-profile-button {
@@ -58,6 +115,7 @@
 
 .profile-profile-button:hover {
     cursor: pointer;
+    box-shadow: lightgray 2px 2px 2px;
 }
 
 #profile-bars {
@@ -68,4 +126,17 @@
 #profile-icon {
     color: grey;
     font-size: large;
+}
+.modal-menu-item {
+    font-weight: bold;
+    width: 80%;
+    align-self: center;
+    padding: 8px;
+    border-bottom: 1px solid lightgray;
+    text-align: center;
+}
+.modal-menu-item:hover {
+    cursor: pointer;
+    background-color: rgb(225, 225, 225);
+    border-radius: 8px;
 }
