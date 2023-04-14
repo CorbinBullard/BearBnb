@@ -11,8 +11,8 @@ const NewReviewModal = ({ spot }) => {
     const history = useHistory();
     const { closeModal } = useModal();
     const [review, setReview] = useState('');
-    const [stars, setStars] = useState(0);
-    const [activeRating, setActiveRating] = useState(0);
+    const [stars, setStars] = useState(1);
+    const [activeRating, setActiveRating] = useState(1);
     const [errors, setErrors] = useState({});
     const [submitWithErrors, setSubmitWithErrors] = useState(false);
     const spotId = spot.id;

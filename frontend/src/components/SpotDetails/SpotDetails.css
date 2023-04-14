@@ -92,6 +92,10 @@
     cursor: pointer;
 }
 
+#login-to-reserve-button {
+    background-color: rgb(117, 117, 117);
+}
+
 #review-header-stars-review-num {
     display: flex;
     gap: 20px;
@@ -143,3 +147,5 @@
     color: aliceblue;
     border-radius: 8px;
 }
+
+

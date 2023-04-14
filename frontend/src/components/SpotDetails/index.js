@@ -76,14 +76,16 @@ const SpotDetails = () => {
                 <div className="booking-container">
                     <div className="price-stars">
                         <p id="spot-price">${spot.price} night</p>
-                        <p><i className="fa fa-star" /> {spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "stars"}  <i className="fas fa-circle" />  {!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"}</p>
+                        <p><i className="fa fa-star gold" /> {spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "stars"}  <i className="fas fa-circle" />  {!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"}</p>
                     </div>
-                    <button id="reserve-button" onClick={() => window.alert("Feature coming soon")}>Reserve</button>
+                    {user ? (<button id="reserve-button" onClick={() => window.alert("Feature coming soon")}>Reserve</button>)
+                    : (<button disabled id="login-to-reserve-button">Login to reserve this spot!</button>)
+                }
                 </div>
             </div>
             <div id="reviews-container">
                 <div id="review-header-stars-review-num">
-                    <h3><i className="fa fa-star"></i> {spot?.avgStarRating ? spot.avgStarRating.toFixed(2) : ""}</h3>
+                    <h3><i className="fa fa-star gold"></i> {spot?.avgStarRating ? spot.avgStarRating.toFixed(2) : ""}</h3>
                     <h3>{!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"} </h3>
                 </div>
                 {canPostReview && (<OpenModalButton
