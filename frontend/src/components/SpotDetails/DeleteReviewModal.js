@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
-import { deleteReviewThunk } from "../../store/reviews";
+import { deleteReviewThunk, fetchCurrentSpotReviewsThunk } from "../../store/reviews";
 import { useModal } from "../../context/Modal";
+import { fetchCurrentSpotThunk } from "../../store/spots";
 const DeleteReviewModal = ({ review }) => {
 
     const dispatch = useDispatch();
@@ -9,6 +10,7 @@ const DeleteReviewModal = ({ review }) => {
     // dispatch(deleteCurrentSpotThunk(spotId));
     const deleteReview = async () => {
         await dispatch(deleteReviewThunk(review.id));
+        await dispatch(fetchCurrentSpotThunk(review.spotId));
         closeModal();
     }
 

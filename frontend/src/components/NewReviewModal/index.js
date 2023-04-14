@@ -3,6 +3,7 @@ import { useModal } from "../../context/Modal";
 import { useDispatch } from "react-redux";
 import { postNewSpotReviewThunk } from "../../store/reviews";
 import { useHistory } from "react-router-dom";
+import { fetchCurrentSpotThunk } from "../../store/spots";
 const NewReviewModal = ({spot}) => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -31,9 +32,10 @@ const NewReviewModal = ({spot}) => {
             setSubmitWithErrors(true);
             return window.alert("Cannot Submit");
         }
-        
+
 
         const promise = new Promise(resolve => resolve(dispatch(postNewSpotReviewThunk({stars, review, spotId}))))
+        promise.then(() => dispatch(fetchCurrentSpotThunk(spotId)))
         promise.then(closeModal)
         promise.then(history.push(`/spots/${spotId}`));
     };
