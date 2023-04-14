@@ -1,9 +1,10 @@
 .spotCard-container {
-    height: 260px;
+    height: 270px;
     width: 260px;
 
     display: flex;
     flex-direction: column;
+
 
 }
 
@@ -12,21 +13,26 @@
 }
 
 .spotCard-image {
-    height: 230px;
+    height: 220px;
     object-fit: cover;
     border-radius: 8px;
+    margin-bottom: 5px;
 }
 
 .spotCard-info {
+    align-self: center;
+    width: 95%;
+    /* padding-top: 5px; */
     display: flex;
     flex-direction: column;
     /* height: 0%; */
+
 }
 
 .SpotCard-cityState-stars {
     display: flex;
     justify-content: space-between;
-    margin: 0
+    margin-bottom: 5px;
         /* height: 20px; */
 
 
@@ -42,9 +48,15 @@
 
 .spotCard-price {
     margin: 0;
+    font-weight: bold;
 }
 
 .tooltip {
-    position: absolute;
-
+    position: relative;
+    bottom: auto;
+    margin-top: 6px;
+    padding:0;
+    font-weight: bold;
+    align-self: center;
+    font-size: small;
 }

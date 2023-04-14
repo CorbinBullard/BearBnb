@@ -1,0 +1,73 @@
+#manage-your-spots-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0px 60px;
+}
+
+#manage-your-spots-container>h2 {
+    margin-bottom: 5px;
+    margin-left: 4px;
+}
+
+#manage-your-spots-container>button {
+    width: 130px;
+    margin: 10px 0;
+
+    padding: 3px;
+    font-weight: bold;
+    background-color: rgb(97, 96, 96);
+    color: rgb(240, 240, 240);
+    border-radius: 3px;
+}
+
+#manage-all-spots-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    list-style: none;
+    margin-top: 30px;
+    padding: 0;
+}
+
+.manage-spot-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.manage-spot-buttons>button {
+    margin: 10px 0;
+    width: 65px;
+    padding: 3px;
+    font-weight: bold;
+    background-color: rgb(97, 96, 96);
+    color: rgb(240, 240, 240);
+    border-radius: 3px;
+    box-shadow: black 2px 1px 1px;
+}
+.manage-spot-buttons>button:hover {
+    cursor: pointer;
+}
+
+/* DELETE SPOT */
+
+#delete-spot-modal-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#delete-spot-button {
+    padding: 8px;
+    margin: 5px 0px;
+    background-color: rgb(250, 115, 115);
+    color: aliceblue;
+    border-radius: 8px;
+}
+
+#keep-spot-button {
+    padding: 8px;
+    margin: 5px 0px;
+    background-color: rgb(97, 96, 96);
+    color: aliceblue;
+    border-radius: 8px;
+}

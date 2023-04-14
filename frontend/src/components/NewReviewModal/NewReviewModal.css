@@ -1,0 +1,32 @@
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    width: 98%;
+}
+
+textarea {
+    width: 98%;
+}
+
+button {
+    padding: 8px;
+    margin: 5px 0px;
+    background-color: rgb(250, 115, 115);
+    color: aliceblue;
+    border-radius: 8px;
+}
+#star-input-container {
+    margin: 10px 0;
+    font-size: xx-large;
+    justify-content: space-around;
+    display: flex;
+}
+.filled {
+    color: rgb(250, 115, 115);;
+}
+.empty {
+    color: rgb(194, 194, 194);
+}

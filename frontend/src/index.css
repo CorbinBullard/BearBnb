@@ -1,1 +1,13 @@
 /* TODO Add site wide styles */
+body {
+    font-family: sans-serif;
+}
+h1 {
+    font-weight: 24pt;
+}
+h2 {
+    font-weight: 18pt;
+}
+textarea {
+    resize: none;
+}

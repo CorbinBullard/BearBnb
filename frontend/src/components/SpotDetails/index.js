@@ -29,11 +29,11 @@ const SpotDetails = () => {
     useEffect(() => {
         for (let i = 0; i < reviews.length; i++) {
             const review = reviews[i];
-            if (review.userId === user.id) return setHasPosted(true);
+            if (review.userId === user?.id) return setHasPosted(true);
         }
         setHasPosted(false);
     }, [hasPosted, reviews]);
-    console.log("reviews Array: ", reviews)
+    // console.log("reviews Array: ", reviews)
 
 
     if (!Object.entries(spot).length || !spot.SpotImages) return null;
@@ -41,24 +41,24 @@ const SpotDetails = () => {
 
     // const reviews = Object.values(reviews);
     const nonPreviewImgArr = spot?.SpotImages.filter(spot => {
-        console.log(spot.preview)
+        // console.log(spot.preview)
         return spot.preview === false
     });
-    console.log("NON PREV", nonPreviewImgArr);
+    // console.log("NON PREV", nonPreviewImgArr);
     const previewImage = spot?.SpotImages.find(image => image.preview === true);
     const previewURL = previewImage ? previewImage.url : "no-url"
 
 
     const canPostReview = (user && spot.ownerId !== user?.id && !hasPosted);
 
-
+    console.log("Num Reviews: ", spot.numReviews)
 
 
     return (
         <div id="spot-details-container">
-            <div className="name-location">
-                <h3 className="spot-name">{spot.name}</h3>
-                <h4 className="spot-location">{spot.city}, {spot.state}, {spot.country}</h4>
+            <div id="name-location">
+                <h3 id="spot-name">{spot.name}</h3>
+                <h4 id="spot-location">{spot.city}, {spot.state}, {spot.country}</h4>
             </div>
             <div id="photo-container">
                 {<img id="previewImage" src={previewURL} alt="previewImage" />}
@@ -75,14 +75,17 @@ const SpotDetails = () => {
                 </div>
                 <div className="booking-container">
                     <div className="price-stars">
-                        <p>${spot.price} night</p>
-                        <p><i className="fa fa-star" /> {spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "stars"} <i className="fas fa-circle" /> {!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"}</p>
+                        <p id="spot-price">${spot.price} night</p>
+                        <p><i className="fa fa-star" /> {spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "stars"}  <i className="fas fa-circle" />  {!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"}</p>
                     </div>
-                    <button onClick={() => window.alert("Feature coming soon")}>Reserve</button>
+                    <button id="reserve-button" onClick={() => window.alert("Feature coming soon")}>Reserve</button>
                 </div>
             </div>
             <div id="reviews-container">
-                <h3><i className="fa fa-star"></i> {spot?.avgStarRating ? spot.avgStarRating.toFixed(2) : ""} {!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"} </h3>
+                <div id="review-header-stars-review-num">
+                    <h3><i className="fa fa-star"></i> {spot?.avgStarRating ? spot.avgStarRating.toFixed(2) : ""}</h3>
+                    <h3>{!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"} </h3>
+                </div>
                 {canPostReview && (<OpenModalButton
                     buttonText="Post Your Review"
                     modalComponent={<NewReviewModal spot={spot} />}
@@ -93,7 +96,7 @@ const SpotDetails = () => {
                         <h5 className="review-card-date">{new Date(review.createdAt).toLocaleDateString()}</h5>
                         <p className="review-card-review">{review.review}</p>
 
-                        {review.User?.id === user.id && <OpenModalButton
+                        {review.User?.id === user?.id && <OpenModalButton
                             modalComponent={<DeleteReviewModal review={review} />}
                             buttonText="Delete"
                         />}

@@ -39,10 +39,10 @@ const LoginFormModal = () => {
     }
 
     return (
-        <>
-            <h1>Log In</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
+        <div id="login-modal-container">
+            <h1 id="login-modal-login-title">Log In</h1>
+            <form id="login-modal-form-component" onSubmit={handleSubmit}>
+                <label className="login-feild-label">
                     Username or Email
                     <input
                         type="text"
@@ -51,7 +51,7 @@ const LoginFormModal = () => {
                         required
                     />
                 </label>
-                <label>
+                <label className="login-feild-label">
                     Password
                     <input
                         type="password"
@@ -63,12 +63,12 @@ const LoginFormModal = () => {
                 {errors.credential && (
                     <p>{errors.credential}</p>
                 )}
-                <button type="submit">Log In</button>
+                <button type="submit" id="login-submit">Log In</button>
             </form>
-            <a className="demo-user-login"
+            <a id="demo-user-login"
                 onClick={handleDemoUserClick}
             >Login as Demo User</a>
-        </>
+        </div>
     )
 }
 

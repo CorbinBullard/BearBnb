@@ -6,7 +6,7 @@
     justify-content: space-around;
 }
 
-#create-new-spot-form {
+#update-new-spot-form {
     /* border: 1px black solid; */
     width: 400px;
     display: flex;
@@ -15,12 +15,12 @@
     /* border: 1px solid black; */
 }
 
-#create-new-spot-form > div {
+#update-new-spot-form>div {
     border-bottom: 1px solid black;
     padding-bottom: 16px;
 }
 
-#create-new-spot-form input {
+#update-new-spot-form input {
     margin: 5px 0;
     padding: 3px 0;
     width: 100%;
@@ -28,18 +28,18 @@
     padding-left: 7px;
 }
 
-#create-spot-location-container {
+#update-spot-location-container {
     display: flex;
     flex-direction: column;
 }
 
 /* FORM INFO */
-#create-spot-country {
+#update-spot-country {
     display: flex;
     flex-direction: column;
 }
 
-#create-spot-address {
+#update-spot-address {
     display: flex;
     flex-direction: column;
 }
@@ -98,29 +98,31 @@
     background-color: rgb(219, 236, 255);
 
 }
+
 #price-sign {
     display: flex;
     gap: 5px;
 }
-#price-sign > p {
+
+#price-sign>p {
     font-weight: bold;
 
 }
 
-#create-spot-title>input {
+#update-spot-title>input {
     width: 100%;
 }
 
-#create-spot-price>input {
+#update-spot-price>input {
     width: 100%;
 }
 
-#create-spot-photos>input {
+#update-spot-photos>input {
     width: 100%;
     margin: 10px 0;
 }
 
-#create-new-spot-form-button {
+#update-new-spot-form-button {
     padding: 8px;
     margin: 14px 0px;
     background-color: rgb(250, 115, 115);

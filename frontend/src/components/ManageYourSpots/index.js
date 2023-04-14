@@ -5,7 +5,7 @@ import SpotCard from "../SpotCard";
 import { useHistory } from "react-router-dom";
 import OpenModalButton from "../OpenModalButton";
 import SpotDeletePrompt from "./spotDeletePrompt";
-
+import "./ManageYourSpots.css"
 
 const ManageYourSpots = () => {
     const history = useHistory();
@@ -29,9 +29,8 @@ const ManageYourSpots = () => {
         <button onClick={createSpot}>Create a New Spot</button>
     )
     return (
-        <>
+        <div id="manage-your-spots-container">
             <h2>Manage Your Spots</h2>
-            <button onClick={createSpot}>Create a New Spot</button>
             <div id="manage-all-spots-container">
                 {spots.map(spot => (
                     <div className="manage-spot-container" key={spot.id}>
@@ -46,7 +45,7 @@ const ManageYourSpots = () => {
                     </div>
                 ))}
             </div>
-        </>
+        </div>
     )
 }
 export default ManageYourSpots;
