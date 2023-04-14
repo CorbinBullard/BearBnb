@@ -1,0 +1,2 @@
+# BearBnb
+This AirBnb Project is my first full-stack project that contains basic functionality of creating, updating, and deleting spots as well as creating and deleting reviews for different spots. This project uses a SQL database, Sequelize, React and Redux. To launch this website locally, open up the project in VSCode, cd into the backend folder, npm start, cd into the frontend folder and finally npm start there. This will launch the frontend on localhost:3000.
