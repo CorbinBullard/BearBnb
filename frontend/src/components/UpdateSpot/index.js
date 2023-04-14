@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { csrfFetch } from "../../store/csrf";
 import { fetchCurrentSpotThunk, updateCurrentSpotThunk } from "../../store/spots";
 import "./UpdateSpot.css"
 // import SpotForm from "../SpotForm";
@@ -115,7 +114,7 @@ const UpdateSpot = () => {
                     <div id="city-container">
                         <label htmlFor="city">City</label>
                         {submitWithErrors && errors.city && <p className="form-errors">{errors.city}</p>}
-                        <input type="text" placeholder="City" onChange={e => setCity(e.target.value)} value={city}></input>,
+                        <input type="text" placeholder="City" onChange={e => setCity(e.target.value)} value={city}></input>
                     </div>
                     <div id="state-container">
                         <label htmlFor="State">State</label>
@@ -126,7 +125,7 @@ const UpdateSpot = () => {
                 <div className="lat-lng">
                     <label htmlFor="lat">Latitude</label>
                     {submitWithErrors && errors.lat && <p className="form-errors">{errors.lat}</p>}
-                    <input type="text" placeholder="Latitude" onChange={e => setLat(e.target.value)} value={lat}></input>,
+                    <input type="text" placeholder="Latitude" onChange={e => setLat(e.target.value)} value={lat}></input>
                     <label htmlFor="lng">Longitude</label>
                     {submitWithErrors && errors.lng && <p className="form-errors">{errors.lng}</p>}
                     <input type="text" placeholder="Longitude" onChange={e => setLng(e.target.value)} value={lng}></input>

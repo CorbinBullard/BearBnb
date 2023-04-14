@@ -17,16 +17,25 @@ button {
     background-color: rgb(250, 115, 115);
     color: aliceblue;
     border-radius: 8px;
+
 }
+button:hover {
+    cursor: pointer;
+}
+
+
 #star-input-container {
     margin: 10px 0;
     font-size: xx-large;
     justify-content: space-around;
     display: flex;
 }
+
 .filled {
-    color: rgb(250, 115, 115);;
+    color: rgb(250, 115, 115);
+    ;
 }
+
 .empty {
     color: rgb(194, 194, 194);
 }
