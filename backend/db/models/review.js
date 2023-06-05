@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       references: { model: 'User' },
       onDelete: 'CASCADE'
     },
-    review: DataTypes.STRING,
+    review: DataTypes.STRING(4000),
     stars: DataTypes.INTEGER
   }, {
     sequelize,
