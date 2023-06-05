@@ -19,18 +19,18 @@ module.exports = {
     await queryInterface.bulkInsert(options, [
       {
         spotId: 1,
-        url: 'pic1',
+        url: `https://cdn.luxe.digital/media/20230123162705/most-expensive-houses-in-the-world-reviews-luxe-digital.jpg`,
         preview: true
       },
       {
         spotId: 2,
-        url: 'pic2',
+        url: `https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?cs=srgb&dl=pexels-binyamin-mellish-106399.jpg`,
         preview: true
       },
       {
         spotId: 3,
-        url: 'pic3',
-        preview: false
+        url: `https://images.adsttc.com/media/images/63c0/a935/7643/4a39/8498/948f/large_jpg/casa-tunich-apiron_13.jpg?1673570670`,
+        preview: true
       }
     ])
   },
