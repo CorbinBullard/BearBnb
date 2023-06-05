@@ -309,7 +309,6 @@ router.post('/', requireAuth, validateNewSpot, async (req, res) => {
 
 
 
-
     const newSpot = await Spot.create({
         address,
         city,

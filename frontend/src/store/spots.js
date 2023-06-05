@@ -57,7 +57,7 @@ export const postNewSpotThunk = (spot) => async (dispatch) => {
     })
     if (res.ok) {
         const spot = await res.json();
-
+        dispatch(createNewSpot(spot))
         return spot;
     }
 }
