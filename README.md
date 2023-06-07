@@ -1,6 +1,6 @@
 # BearBnb
 
-Remotebnb is a soft clone of Airbnb.
+BearBnB is a soft clone of Airbnb.
 
 Check out [BearBnB](https://bearbnb-iy1a.onrender.com/)
 
@@ -11,7 +11,7 @@ Check out [BearBnB](https://bearbnb-iy1a.onrender.com/)
 1. Clone this repository:
 
    `
-   https://github.com/itsmaica/Remotebnb.git
+   https://github.com/CorbinBullard/BearBnb.git
    `
 2. Install denpendencies into the Backed and the Frontend by making a terminal for each one and then run the following:
 
