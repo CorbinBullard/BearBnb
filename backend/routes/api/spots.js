@@ -446,7 +446,8 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
     const bookings = await spot.getBookings();
 
     // console.log(spot.dataValues.ownerId, user.id)
-    const bookingsArr = []
+    const bookingsArr = [];
+    console.log("HERE ==================================")
 
     if (spot.dataValues.ownerId === user.id) { // IS OWNER
 
@@ -511,6 +512,7 @@ router.post('/:spotId/bookings', requireAuth, validateDates, async (req, res, ne
     // Check if Valid Spot
     if (!spot) return res.status(404).json({ message: "Spot couldn't be found" });
     // Check if User OWNS this Spot
+
     if (spot.dataValues.ownerId === user.id) return res.status(403).json({ message: "Cannot book your own Spot" })
     // Check if end Date is after start Date
     // console.log(start.getTime(), end.getTime())

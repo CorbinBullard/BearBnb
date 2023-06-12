@@ -7,6 +7,7 @@ import OpenModalButton from "../OpenModalButton";
 import NewReviewModal from "../NewReviewModal";
 import "./SpotDetails.css"
 import DeleteReviewModal from "./DeleteReviewModal";
+import Bookings from "../Bookings";
 
 
 
@@ -73,7 +74,8 @@ const SpotDetails = () => {
                     <h3 className="hosted-by">Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</h3>
                     <p className="description">{spot.description}</p>
                 </div>
-                <div className="booking-container">
+                {user && spot.ownerId !== user.id && <Bookings spot={spot} user={user} />}
+                {/* <div className="booking-container">
                     <div className="price-stars">
                         <p id="spot-price">${spot.price} night</p>
                         <p><i className="fa fa-star gold" /> {spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "stars"}  <i className="fas fa-circle" />  {!spot.numReviews ? "New" : spot.numReviews === 1 ? spot.numReviews + " Review" : spot.numReviews + " Reviews"}</p>
@@ -81,7 +83,7 @@ const SpotDetails = () => {
                     {user ? (<button id="reserve-button" onClick={() => window.alert("Feature coming soon")}>Reserve</button>)
                     : (<button disabled id="login-to-reserve-button">Login to reserve this spot!</button>)
                 }
-                </div>
+                </div> */}
             </div>
             <div id="reviews-container">
                 <div id="review-header-stars-review-num">

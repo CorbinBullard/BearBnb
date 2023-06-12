@@ -27,17 +27,13 @@ router.get('/current', requireAuth, async (req, res) => {
 
     for (let i = 0; i < getReviews.length; i++) {
         const review = getReviews[i];
-        // console.log("REVIEW :   ",review)
-        // console.log("REVIEW ID:  ", review)
-        // const images = await ReviewImage.findAll({where: {reviewId: 1}})
+
         const reviewImgs = await review.getReviewImages({ attributes: ['id', 'url'] })
 
-        // const images = await ReviewImage.findAll({where: {reviewId: review.id}})
         const previewImage = await SpotImage.findOne({
             attributes: ['url'],
             where: {
                 preview: true
-
             }
         })
         const spotObj = { ...review.Spot.dataValues, previewImage: previewImage.url }

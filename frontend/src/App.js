@@ -10,12 +10,13 @@ import SpotDetails from "./components/SpotDetails";
 import CreateNewSpot from "./components/CreateNewSpot";
 import ManageYourSpots from "./components/ManageYourSpots";
 import UpdateSpot from "./components/UpdateSpot";
+import { fetchUserBookingsThunk } from "./store/bookings";
 
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
-    dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
+    dispatch(sessionActions.restoreUser()).then().then(() => setIsLoaded(true));
   }, [dispatch]);
 
   return (
