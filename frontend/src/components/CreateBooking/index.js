@@ -114,10 +114,10 @@ const CreateBooking = ({ spot }) => {
                             onChange={e => setEndDate(e.target.value)}
                         />
                     </label>
-                    {startDate && endDate && !Object.values(errors).length &&
-                        <p>Total: ${(spot.price * (getNumberOfDays(startDate, endDate))).toFixed(2)}</p>
-                    }
                 </div>
+                {startDate && endDate && !Object.values(errors).length &&
+                    <p>Total: ${(spot.price * (getNumberOfDays(startDate, endDate))).toFixed(2)}</p>
+                }
                 {Object.values(errors).length ? (
                     <p className="errors">{errors.date}</p>
                 ) : ('')}
