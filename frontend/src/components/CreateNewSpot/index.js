@@ -76,6 +76,7 @@ const CreateNewSpot = () => {
             description,
             price
         }
+        
         const spot = await dispatch(postNewSpotThunk(newSpot));
         console.log("PREVIEW IMAGE : ", preview)
         const formData = new FormData();
