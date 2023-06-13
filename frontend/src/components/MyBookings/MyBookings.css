@@ -14,14 +14,42 @@
 
 /* My Booking Card */
 
-.my-bookings-card-info-container {
-    margin-left: 20px;
-}
-
 .my-bookings-card-container {
-    border: 1px solid black;
+    border: 1px solid rgb(130, 130, 130, 0.5);
+    border-radius: 10px;
     display: flex;
 }
+.my-bookings-card-info-container {
+
+}
+.my-bookings-card-right-side {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.my-bookings-card-info-container p, h4 {
+    margin: 7px 0px;
+}
+.my-bookings-card-info-container label {
+    margin-bottom: 0px;
+    border-bottom: 1px solid rgb(130, 130, 130, 0.5);
+}
 .my-bookings-card-image {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
     width: 300px;
+}
+.myBookings-update-delete-btns-container {
+    gap: 15px;
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-around;
+}
+.bookings-dates-container {
+    margin-top: 20px;
+}
+.booking-date {
+    font-style: italic;
+    font-weight: bold;
 }

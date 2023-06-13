@@ -42,7 +42,7 @@ function SignupFormModal() {
         });
     };
     useEffect(() => {
-        const errorsObj ={};
+        const errorsObj = {};
         if (!username) errorsObj.username = "Username is required";
         if (!email) errorsObj.email = "Email is required";
         if (!firstName) errorsObj.firstName = "First name is required";
@@ -50,7 +50,7 @@ function SignupFormModal() {
         if (!password) errorsObj.password = "password is required";
         if (password && password !== confirmPassword) errorsObj.confirmPassword = "passwords do not match";
         setPreErrors(errorsObj);
-    },[email, username, firstName, lastName, password, confirmPassword])
+    }, [email, username, firstName, lastName, password, confirmPassword])
 
     return (
         <div id="sign-up-modal-container">
@@ -118,7 +118,7 @@ function SignupFormModal() {
                 {errors.confirmPassword && (
                     <p className="errors">{errors.confirmPassword}</p>
                 )}
-                <button id="create-new-spot-form-button" type="submit" disabled={Object.values(preErrors).length ? true : false}>Sign Up</button>
+                <button id="create-new-spot-form-button" type="submit" disabled={Object.values(preErrors).length} className={Object.values(preErrors).length ? "disabled" : ''}>Sign Up</button>
             </form>
         </div>
     );

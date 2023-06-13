@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSpotBookingsThunk, fetchUserBookingsThunk, postBookingThunk } from "../../store/bookings";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import "./Bookings.css"
 
 const CreateBooking = ({ spot }) => {
 
@@ -120,7 +121,7 @@ const CreateBooking = ({ spot }) => {
                 {Object.values(errors).length ? (
                     <p className="errors">{errors.date}</p>
                 ) : ('')}
-                <button disabled={Object.values(errors).length}>{errors.bookingConflict ? 'Spot unvaliable during these dates' : 'Book this Spot'}</button>
+                <button disabled={Object.values(errors).length} className={Object.values(errors).length ? 'disabled' : ''}>{errors.bookingConflict ? 'Spot unvaliable during these dates' : 'Book this Spot'}</button>
             </form>
 
         </div>

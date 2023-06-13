@@ -13,5 +13,8 @@ textarea {
 }
 
 .gold {
-    color: rgb(250, 115, 115);;
+    color: rgb(250, 115, 115);
+}
+.disabled  {
+    cursor: not-allowed !important
 }
