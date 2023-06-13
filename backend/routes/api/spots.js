@@ -5,6 +5,7 @@ const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../d
 const { requireAuth } = require('../../utils/auth.js');
 const { handleValidationErrors } = require('../../utils/validation.js');
 const { check } = require('express-validator');
+const { singleMulterUpload, multipleMulterUpload, singleFileUpload } = require('../../aws');
 
 
 
@@ -241,7 +242,7 @@ router.get('/', async (req, res) => {
 })
 
 // Create Image for a Spot ===============>
-router.post('/:spotId/images', requireAuth, async (req, res) => {
+router.post('/:spotId/images', singleMulterUpload('image'),requireAuth, async (req, res) => {
     const { url, preview } = req.body;
     const spot = await Spot.findByPk(req.params.spotId);
 
@@ -251,9 +252,12 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
     const { user } = req;
     if (spot.ownerId !== user.id) return res.status(403).json({ message: "Forbidden" });
 
+    const key = await singleFileUpload({ file: req.file, public: true });
+    console.log("IMAGE FILE KEY : ---------------------------------------->", key)
+
     const img = await spot.createSpotImage({
-        url,
-        preview
+        url: key,
+        preview: true
     })
     return res.json({
         id: img.id,

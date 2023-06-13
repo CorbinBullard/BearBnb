@@ -17,10 +17,7 @@ const CreateNewSpot = () => {
     const [price, setPrice] = useState('');
 
     const [preview, setPreview] = useState('');
-    const [img1, setImg1] = useState('');
-    const [img2, setImg2] = useState('');
-    const [img3, setImg3] = useState('');
-    const [img4, setImg4] = useState('');
+
 
     const [errors, setErrors] = useState({});
     const [submitWithErrors, setSubmitWithErrors] = useState(false);
@@ -41,16 +38,16 @@ const CreateNewSpot = () => {
         if (!price) errorsObj.price = "Price is required";
         if (price && isNaN(+price)) errorsObj.price = "Price must be a number";
         if (!preview) errorsObj.preview = "Preview image is required";
-        if (preview && !isValidUrl(preview)) errorsObj.preview = "Image URL must end in .png, .jpg, or .jpeg";
-        if (img1 && !isValidUrl(img1)) errorsObj.img1 = "Image URL must end in .png, .jpg, or .jpeg";
-        if (img2 && !isValidUrl(img2)) errorsObj.img2 = "Image URL must end in .png, .jpg, or .jpeg";
-        if (img3 && !isValidUrl(img3)) errorsObj.img3 = "Image URL must end in .png, .jpg, or .jpeg";
-        if (img4 && !isValidUrl(img4)) errorsObj.img4 = "Image URL must end in .png, .jpg, or .jpeg";
+        // if (preview && !isValidUrl(preview)) errorsObj.preview = "Image URL must end in .png, .jpg, or .jpeg";
+        // if (img1 && !isValidUrl(img1)) errorsObj.img1 = "Image URL must end in .png, .jpg, or .jpeg";
+        // if (img2 && !isValidUrl(img2)) errorsObj.img2 = "Image URL must end in .png, .jpg, or .jpeg";
+        // if (img3 && !isValidUrl(img3)) errorsObj.img3 = "Image URL must end in .png, .jpg, or .jpeg";
+        // if (img4 && !isValidUrl(img4)) errorsObj.img4 = "Image URL must end in .png, .jpg, or .jpeg";
 
         setErrors(errorsObj);
 
 
-    }, [country, address, city, state, lat, lng, description, name, price, preview, img1, img2, img3, img4])
+    }, [country, address, city, state, lat, lng, description, name, price, preview])
 
     const isValidUrl = (url) => {
         const imageFormatTypes = ['jpg', 'jpeg', 'png'];
@@ -79,47 +76,52 @@ const CreateNewSpot = () => {
             description,
             price
         }
-        const spot = new Promise((resolve, reject) => resolve(dispatch(postNewSpotThunk(newSpot))));
+        const spot = await dispatch(postNewSpotThunk(newSpot));
+        console.log("PREVIEW IMAGE : ", preview)
+        const formData = new FormData();
+        formData.append("image", preview)
+        formData.append("preview", true)
+        console.log("FORM DATA : ----> ", formData)
 
-        await spot.then((spot) => submitImages(spot.id));
-
-
-        spot.then(spot => {
-
-            history.push(`/spots/${spot.id}`)
-        });
-    }
-    const submitImages = async (id) => {
-        console.log("IMAGES", img1, img2, img3, img4)
-        await csrfFetch(`/api/spots/${id}/images`, {
+        await csrfFetch(`/api/spots/${spot.id}/images`, {
             method: 'POST',
-            body: JSON.stringify({ url: preview, preview: true })
+            body: formData
         })
-        if (img1) {
-            await csrfFetch(`/api/spots/${id}/images`, {
-                method: 'POST',
-                body: JSON.stringify({ url: img1, preview: false })
-            })
-        }
-        if (img2) {
-            await csrfFetch(`/api/spots/${id}/images`, {
-                method: 'POST',
-                body: JSON.stringify({ url: img2, preview: false })
-            })
-        }
-        if (img3) {
-            await csrfFetch(`/api/spots/${id}/images`, {
-                method: 'POST',
-                body: JSON.stringify({ url: img3, preview: false })
-            })
-        }
-        if (img4) {
-            await csrfFetch(`/api/spots/${id}/images`, {
-                method: 'POST',
-                body: JSON.stringify({ url: img4, preview: false })
-            })
-        }
+
+        history.push(`/spots/${spot.id}`)
+
     }
+    // const submitImages = async (id) => {
+    //     console.log("IMAGES", img1, img2, img3, img4)
+    //     await csrfFetch(`/api/spots/${id}/images`, {
+    //         method: 'POST',
+    //         body: JSON.stringify({ url: preview, preview: true })
+    //     })
+    //     if (img1) {
+    //         await csrfFetch(`/api/spots/${id}/images`, {
+    //             method: 'POST',
+    //             body: JSON.stringify({ url: img1, preview: false })
+    //         })
+    //     }
+    //     if (img2) {
+    //         await csrfFetch(`/api/spots/${id}/images`, {
+    //             method: 'POST',
+    //             body: JSON.stringify({ url: img2, preview: false })
+    //         })
+    //     }
+    //     if (img3) {
+    //         await csrfFetch(`/api/spots/${id}/images`, {
+    //             method: 'POST',
+    //             body: JSON.stringify({ url: img3, preview: false })
+    //         })
+    //     }
+    //     if (img4) {
+    //         await csrfFetch(`/api/spots/${id}/images`, {
+    //             method: 'POST',
+    //             body: JSON.stringify({ url: img4, preview: false })
+    //         })
+    //     }
+    // }
 
     return (
         <form id="create-new-spot-form"
@@ -186,16 +188,12 @@ const CreateNewSpot = () => {
             <div id="create-spot-photos">
                 <h3>Liven up your spot with photos</h3>
                 <p>Submit a link to at least one photo to publish your spot</p>
-                <input type="text" placeholder="Preview Image URL" onChange={e => setPreview(e.target.value)} value={preview}></input>
+                <input
+                    type="file"
+                    onChange={e => setPreview(e.target.files[0])}
+                    multiple
+                />
                 {submitWithErrors && errors.preview && <p className="form-errors">{errors.preview}</p>}
-                <input type="text" placeholder="Image URL" onChange={e => setImg1(e.target.value)} value={img1}></input>
-                {submitWithErrors && errors.img1 && <p className="form-errors">{errors.img1}</p>}
-                <input type="text" placeholder="Image URL" onChange={e => setImg2(e.target.value)} value={img2}></input>
-                {submitWithErrors && errors.img2 && <p className="form-errors">{errors.img2}</p>}
-                <input type="text" placeholder="Image URL" onChange={e => setImg3(e.target.value)} value={img3}></input>
-                {submitWithErrors && errors.img3 && <p className="form-errors">{errors.img3}</p>}
-                <input type="text" placeholder="Image URL" onChange={e => setImg4(e.target.value)} value={img4}></input>
-                {submitWithErrors && errors.img4 && <p className="form-errors">{errors.img4}</p>}
             </div>
             <button id="create-new-spot-form-button">Create Spot</button>
         </form>

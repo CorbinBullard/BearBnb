@@ -50,6 +50,7 @@ const createNewSpot = (spot) => {
 }
 
 export const postNewSpotThunk = (spot) => async (dispatch) => {
+
     const {address, city, state, country, lat, lng, name, description, price} = spot;
     const res = await csrfFetch('/api/spots', {
         method: 'POST',
