@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import LoginFormModal from "./components/LoginFormModal";
 import SignupFormPage from "./components/SignupFormModal";
@@ -10,13 +10,21 @@ import SpotDetails from "./components/SpotDetails";
 import CreateNewSpot from "./components/CreateNewSpot";
 import ManageYourSpots from "./components/ManageYourSpots";
 import UpdateSpot from "./components/UpdateSpot";
-import { fetchUserBookingsThunk } from "./store/bookings";
+import { clearUserBookingsAction, fetchUserBookingsThunk } from "./store/bookings";
+import MyBookings from "./components/MyBookings";
 
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+  const user = useSelector(state => state.session.user)
   useEffect(() => {
-    dispatch(sessionActions.restoreUser()).then().then(() => setIsLoaded(true));
+    dispatch(sessionActions.restoreUser()).then(() => {
+      if (user) {
+        console.log("HERE    ", user)
+        dispatch(fetchUserBookingsThunk())
+      }
+      else dispatch(clearUserBookingsAction());
+    }).then(() => setIsLoaded(true));
   }, [dispatch]);
 
   return (
@@ -38,6 +46,9 @@ function App() {
           </Route>
           <Route path={"/spots/:spotId"}>
             <SpotDetails />
+          </Route>
+          <Route>
+            <MyBookings />
           </Route>
         </Switch>
       )}

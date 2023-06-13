@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useModal } from "../../context/Modal";
 import { useDispatch } from "react-redux";
-import { postNewSpotReviewThunk } from "../../store/reviews";
+import { postNewSpotReviewThunk, updateReviewThunk } from "../../store/reviews";
 import { useHistory } from "react-router-dom";
 import { fetchCurrentSpotThunk } from "../../store/spots";
 import "./NewReviewModal.css"
 
-const NewReviewModal = ({ spot }) => {
+const NewReviewModal = ({ spot, isUpdating, currReview }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { closeModal } = useModal();
     const [review, setReview] = useState('');
-    const [stars, setStars] = useState(1);
-    const [activeRating, setActiveRating] = useState(1);
+    const [stars, setStars] = useState(isUpdating ? currReview.stars : 1);
+    const [activeRating, setActiveRating] = useState(isUpdating ? currReview.stars : 1);
     const [errors, setErrors] = useState({});
     const [submitWithErrors, setSubmitWithErrors] = useState(false);
     const spotId = spot.id;
@@ -25,7 +25,14 @@ const NewReviewModal = ({ spot }) => {
 
         setErrors(errorsObj);
 
-    }, [stars, review])
+    }, [stars, review]);
+
+    useEffect(() => {
+        if (isUpdating) {
+            setReview(currReview.review);
+            setStars(currReview.stars);
+        }
+    }, [])
 
 
     const handleSubmit = (e) => {
@@ -36,11 +43,16 @@ const NewReviewModal = ({ spot }) => {
             return window.alert("Cannot Submit");
         }
 
-
-        const promise = new Promise(resolve => resolve(dispatch(postNewSpotReviewThunk({ stars, review, spotId }))))
-        promise.then(() => dispatch(fetchCurrentSpotThunk(spotId)))
-        promise.then(closeModal)
-        promise.then(history.push(`/spots/${spotId}`));
+        if (!isUpdating) {
+            const promise = new Promise(resolve => resolve(dispatch(postNewSpotReviewThunk({ stars, review, spotId }))))
+            promise.then(() => dispatch(fetchCurrentSpotThunk(spotId)))
+            promise.then(closeModal)
+            promise.then(history.push(`/spots/${spotId}`));
+        } else {
+            dispatch(updateReviewThunk({ id: currReview.id, stars, review }))
+                .then(() => dispatch(fetchCurrentSpotThunk(spotId)))
+                .then(() => closeModal());
+        }
     };
 
     return (
@@ -53,7 +65,7 @@ const NewReviewModal = ({ spot }) => {
                     onChange={e => setReview(e.target.value)}
                     value={review}
                 ></textarea>
-                <div>
+                <div id="">
                     <div id="star-input-container">
                         <div
                             className={activeRating >= 1 ? "filled" : "empty"}
@@ -97,7 +109,7 @@ const NewReviewModal = ({ spot }) => {
                         </div>
                     </div>
                 </div>
-                <button disabled={Object.values(errors).length}>Submit Your Review</button>
+                <button disabled={Object.values(errors).length}>{isUpdating ? "Update Review" : "Submit Your Review"}</button>
             </form>
         </>
     );

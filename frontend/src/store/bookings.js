@@ -3,7 +3,10 @@ import deepCopy from "./deepCopy";
 
 const LOAD_USER_BOOKINGS = 'bookings/LoadUserBookings';
 const LOAD_SPOT_BOOKINGS = 'bookings/LoadSpotBookings';
-const CREATE_BOOKING = 'bookings/CreateNewBooking'
+const CREATE_BOOKING = 'bookings/CreateNewBooking';
+const UPDATE_BOOKING = 'bookings/UpdateBooking';
+const DELETE_BOOKING = 'bookings/DeleteBooking';
+const CLEAR_USER_BOOKINGS = 'bookings/ClearUserBookings'
 
 const loadUserBookingsAction = (bookings) => {
     return {
@@ -34,10 +37,9 @@ export const fetchSpotBookingsThunk = spotId => async dispatch => {
 
     if (res.ok) {
         const bookings = await res.json();
-        dispatch(loadSpotBookingsAction(bookings))
+        dispatch(loadSpotBookingsAction(bookings));
     }
 }
-
 
 // Create Booking
 
@@ -50,9 +52,9 @@ const createBookingAction = booking => {
 
 export const postBookingThunk = (spotId, booking) => async dispatch => {
 
-    const res = await csrfFetch(`/api/spots/${spotId}/bookings`,{
+    const res = await csrfFetch(`/api/spots/${spotId}/bookings`, {
         method: 'POST',
-        body: JSON.stringify({...booking})
+        body: JSON.stringify({ ...booking })
     });
 
     if (res.ok) {
@@ -63,6 +65,46 @@ export const postBookingThunk = (spotId, booking) => async dispatch => {
     }
 }
 
+// Update Booking
+const updateBookingAction = booking => {
+    return {
+        type: UPDATE_BOOKING,
+        booking
+    }
+}
+
+export const updateBookingThunk = booking => async dispatch => {
+    const res = await csrfFetch(`/api/bookings/${booking.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({...booking})
+    })
+    if (res.ok) {
+        const booking = await res.json();
+        dispatch(updateBookingAction(booking))
+    }
+}
+
+// Delete Booking
+const deleteBookingAction = bookingId => {
+    return {
+        type: DELETE_BOOKING,
+        bookingId
+    }
+}
+
+export const deleteBookingThunk = bookingId => async dispatch => {
+    const res = await csrfFetch(`/api/bookings/${bookingId}`, {
+        method: 'DELETE'
+    })
+    if (res.ok) {
+        dispatch(deleteBookingAction(bookingId));
+    }
+}
+export const clearUserBookingsAction = () => {
+    return {
+        type: CLEAR_USER_BOOKINGS
+    }
+}
 
 
 const initialState = { userBookings: {}, currentSpotBookings: {} }
@@ -72,8 +114,7 @@ const bookingsReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case LOAD_USER_BOOKINGS: {
-            console.log(action);
-            console.log("bookings: ", action.bookings);
+            newState.userBookings = {};
             if (action.bookings.Bookings.length) {
                 action.bookings.Bookings.forEach(booking => {
                     console.log("BOOKING: ", booking)
@@ -83,12 +124,26 @@ const bookingsReducer = (state = initialState, action) => {
             return newState;
         }
         case LOAD_SPOT_BOOKINGS: {
-
             if (action.bookings.Bookings.length) {
-                newState.currentSpotBookings = action.bookings;
+                newState.currentSpotBookings = action.bookings.Bookings;
             }
-
             return newState;
+        }
+        case CREATE_BOOKING: {
+            newState.userBookings[action.booking.id] = action.booking
+            return newState;
+        }
+        case UPDATE_BOOKING: {
+            newState.userBookings[action.booking.id].startDate = action.booking.startDate;
+            newState.userBookings[action.booking.id].endDate = action.booking.endDate;
+            return newState;
+        }
+        case DELETE_BOOKING: {
+            delete newState.userBookings[action.bookingId];
+            return newState;
+        }
+        case CLEAR_USER_BOOKINGS: {
+            newState.userBookings = {};
         }
         default:
             return state;

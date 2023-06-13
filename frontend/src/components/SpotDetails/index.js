@@ -7,7 +7,8 @@ import OpenModalButton from "../OpenModalButton";
 import NewReviewModal from "../NewReviewModal";
 import "./SpotDetails.css"
 import DeleteReviewModal from "./DeleteReviewModal";
-import Bookings from "../Bookings";
+import CreateBooking from "../CreateBooking";
+
 
 
 
@@ -74,7 +75,7 @@ const SpotDetails = () => {
                     <h3 className="hosted-by">Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</h3>
                     <p className="description">{spot.description}</p>
                 </div>
-                {user && spot.ownerId !== user.id && <Bookings spot={spot} user={user} />}
+                {user && spot.ownerId !== user.id && <CreateBooking spot={spot} user={user} />}
                 {/* <div className="booking-container">
                     <div className="price-stars">
                         <p id="spot-price">${spot.price} night</p>
@@ -92,7 +93,7 @@ const SpotDetails = () => {
                 </div>
                 {canPostReview && (<OpenModalButton
                     buttonText="Post Your Review"
-                    modalComponent={<NewReviewModal spot={spot} />}
+                    modalComponent={<NewReviewModal spot={spot} isUpdating={false} />}
                 />)}
                 {reviews?.length === 0 && canPostReview ? <p>Be the first to post a review</p> : reviews?.reverse().map(review => (
                     <div className="review-card" key={review.id}>
@@ -100,10 +101,18 @@ const SpotDetails = () => {
                         <h5 className="review-card-date">{new Date(review.createdAt).toLocaleDateString()}</h5>
                         <p className="review-card-review">{review.review}</p>
 
-                        {review.User?.id === user?.id && <OpenModalButton
-                            modalComponent={<DeleteReviewModal review={review} />}
-                            buttonText="Delete"
-                        />}
+                        {review.User?.id === user?.id && (
+                            <>
+                                <OpenModalButton
+                                    modalComponent={<NewReviewModal spot={spot } currReview={review} isUpdating={true} />}
+                                    buttonText="Update"
+                                />
+                                <OpenModalButton
+                                    modalComponent={<DeleteReviewModal review={review} />}
+                                    buttonText="Delete"
+                                />
+                            </>
+                        )}
                     </div>
                 ))}
             </div>

@@ -1,12 +1,10 @@
 const express = require('express');
-const { Op, DATEONLY } = require('sequelize');
+const { Op } = require('sequelize');
 const router = express.Router();
-const { User, Spot, Review, SpotImage, ReviewImage } = require('../../db/models');
+const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth.js');
 const { handleValidationErrors } = require('../../utils/validation.js');
 const { check } = require('express-validator');
-
-
 
 
 
@@ -452,7 +450,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
     if (spot.dataValues.ownerId === user.id) { // IS OWNER
 
         for (let i = 0; i < bookings.length; i++) {
-            const booking = bookings[i];
+            const booking = bookings[i].toJSON();
 
             const user = await User.findByPk(booking.dataValues.userId, {
                 attributes: ['id', 'firstName', 'lastName']
@@ -462,24 +460,25 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
 
             const obj = {
                 User: user,
-                id: booking.dataValues.id,
-                spotId: booking.dataValues.spotId,
-                userId: booking.dataValues.userId,
-                startDate: booking.dataValues.startDate,
-                endDate: booking.dataValues.endDate,
-                createdAt: booking.dataValues.createdAt,
-                updatedAt: booking.dataValues.updatedAt
+                id: booking.id,
+                spotId: booking.spotId,
+                userId: booking.userId,
+                startDate: booking.startDate,
+                endDate: booking.endDate,
+                createdAt: booking.createdAt,
+                updatedAt: booking.updatedAt
             }
             bookingsArr.push(obj);
         }
 
     } else {
         for (let i = 0; i < bookings.length; i++) {
-            const booking = bookings[i];
+            const booking = bookings[i].toJSON();
             const obj = {
-                spotId: booking.dataValues.spotId,
-                startDate: booking.dataValues.startDate,
-                endDate: booking.dataValues.endDate
+                id: booking.id,
+                spotId: booking.spotId,
+                startDate: booking.startDate,
+                endDate: booking.endDate
             }
             bookingsArr.push(obj);
         }
@@ -527,10 +526,10 @@ router.post('/:spotId/bookings', requireAuth, validateDates, async (req, res, ne
     const currentBookings = await spot.getBookings();
 
     for (let i = 0; i < currentBookings.length; i++) {
-        const booking = currentBookings[i];
+        const booking = currentBookings[i].toJSON();
 
-        const currStartingDate = new Date(booking.dataValues.startDate);
-        const currEndingDate = new Date(booking.dataValues.endDate);
+        const currStartingDate = new Date(booking.startDate);
+        const currEndingDate = new Date(booking.endDate);
 
         // console.log(start.getTime(), currStartingDate.getTime(), currEndingDate.getTime())
         // console.log(start.getTime() >= currStartingDate.getTime() && start.getTime() <= currEndingDate.getTime())
@@ -547,13 +546,16 @@ router.post('/:spotId/bookings', requireAuth, validateDates, async (req, res, ne
         // after startDate AND before endDate
     }
 
-    const newSpot = await spot.createBooking({
+    const _booking = await spot.createBooking({
         startDate: req.body.startDate,
         endDate: req.body.endDate,
         userId: user.id
     })
+    const booking = await Booking.findByPk(_booking.id, {
+        include: { model: Spot }
+    });
 
-    res.json(newSpot)
+    res.json(booking);
 })
 
 

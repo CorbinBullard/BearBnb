@@ -26,11 +26,12 @@ function ProfileButton({ user }) {
         const closeMenu = (e) => {
             if (!ulRef.current.contains(e.target)) {
                 setShowMenu(false);
-
             }
         };
 
-        document.addEventListener('click', closeMenu);
+        setTimeout(() => {
+            document.addEventListener('click', closeMenu);
+        })
 
         return () => document.removeEventListener("click", closeMenu);
     }, [showMenu]);
@@ -58,12 +59,11 @@ function ProfileButton({ user }) {
             <ul className={ulClassName} ref={ulRef}>
                 {user ? (
                     <>
-                        {/* <li>{user.username}</li> */}
-
                         <li id="user-name">Hello, {user.firstName}</li>
                         <li id="user-email">{user.email}</li>
+                        <li><NavLink className="profile-manage-spots" to="/bookings">My Bookings</NavLink></li>
                         <li>
-                            <NavLink id="profile-manage-spots" to="/spots/current">Manage Your Spots</NavLink>
+                            <NavLink className="profile-manage-spots" to="/spots/current">Manage Your Spots</NavLink>
                         </li>
                         <li>
                             <button id="logout" onClick={logout}>Log Out</button>

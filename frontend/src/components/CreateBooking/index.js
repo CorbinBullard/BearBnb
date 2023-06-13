@@ -1,24 +1,26 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSpotBookingsThunk, fetchUserBookingsThunk, postBookingThunk } from "../../store/bookings";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-const Bookings = ({ spot, user }) => {
+const CreateBooking = ({ spot }) => {
+
+    const user = useSelector(state => state.session.user)
     const dispatch = useDispatch();
-    const bookings = useSelector(state => state.bookings.userBookings)
-
+    const bookings = useSelector(state => state.bookings.currentSpotBookings);
+    const history = useHistory();
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
-    const [errors, setErrors] = useState({})
+    const [errors, setErrors] = useState({});
     const today = new Date().toLocaleDateString('en-CA');
-    const date = today.split('-')
+    const date = today.split('-');
     date[2]++;
-    const tomorrow = date.join('-')
+    const tomorrow = date.join('-');
 
     useEffect(() => {
         if (user) {
-            dispatch(fetchUserBookingsThunk())
-                .then(() => dispatch(fetchSpotBookingsThunk(spot.id)));
+            dispatch(fetchSpotBookingsThunk(spot.id));
         }
 
     }, []);
@@ -27,12 +29,28 @@ const Bookings = ({ spot, user }) => {
         const start = startDate.split('-').join('');
         const end = endDate.split('-').join('');
 
-        const errorsObj = {}
+
+        const errorsObj = {};
         if (!startDate) errorsObj.startDate = "Start Date is required";
         if (!endDate) errorsObj.endDate = "End Date is required";
         if (startDate && endDate && end - start <= 0) errorsObj.date = "End date cannot be on or before Start Date";
-        setErrors(errorsObj)
+        if (startDate && endDate) {
+            for (let i = 0; i < bookings.length; i++) {
+                const booking = bookings[i];
+                const currStart = booking.startDate.split('-').join('');
+                const currEnd = booking.endDate.split('-').join('');
+
+                if (start <= currEnd && currStart <= end) {
+                    errorsObj.bookingConflict = "Spot unavaliable during these dates";
+                    break;
+                }
+            };
+        }
+        setErrors(errorsObj);
+
     }, [startDate, endDate])
+
+
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -48,12 +66,27 @@ const Bookings = ({ spot, user }) => {
         } catch (e) {
             console.log(e)
         }
+        history.push('/bookings')
 
     }
-    console.log("TODAY : ", today)
-    console.log("TOMORROW : ", tomorrow)
 
-    console.log("CURRENT USER BOOKINGS", bookings)
+    function getNumberOfDays(start, end) {
+        const date1 = new Date(start);
+        const date2 = new Date(end);
+
+        // One day in milliseconds
+        const oneDay = 1000 * 60 * 60 * 24;
+
+        // Calculating the time difference between two dates
+        const diffInTime = date2.getTime() - date1.getTime();
+
+        // Calculating the no. of days between two dates
+        const diffInDays = Math.round(diffInTime / oneDay);
+
+        return diffInDays;
+    }
+
+
     return (
         <div className="booking-container">
             <div className="price-stars">
@@ -80,11 +113,17 @@ const Bookings = ({ spot, user }) => {
                             onChange={e => setEndDate(e.target.value)}
                         />
                     </label>
+                    {startDate && endDate && !Object.values(errors).length &&
+                        <p>Total: ${(spot.price * (getNumberOfDays(startDate, endDate))).toFixed(2)}</p>
+                    }
                 </div>
-                <button disabled={Object.values(errors).length}>Book This Listing</button>
+                {Object.values(errors).length ? (
+                    <p className="errors">{errors.date}</p>
+                ) : ('')}
+                <button disabled={Object.values(errors).length}>{errors.bookingConflict ? 'Spot unvaliable during these dates' : 'Book this Spot'}</button>
             </form>
 
         </div>
     )
 }
-export default Bookings;
+export default CreateBooking;
