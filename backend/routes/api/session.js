@@ -34,6 +34,7 @@ router.post(
                     username: credential,
                     email: credential
                 }
+
             }
         });
 

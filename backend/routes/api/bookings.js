@@ -127,6 +127,7 @@ router.put('/:bookingId', requireAuth, validateDates, async (req, res) => {
         startDate: start,
         endDate: end
     })
+    
 
 
     res.json(newBooking)

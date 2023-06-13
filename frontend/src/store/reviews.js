@@ -1,8 +1,10 @@
 import { csrfFetch } from "./csrf";
+import deepCopy from "./deepCopy";
 
 const LOAD_CURRENT_SPOT_REVIEWS = 'reviews/currentSpotReviews';
 const CREATE_NEW_REVIEW = 'reviews/createNewReview';
 const DELETE_REVIEW = 'reviews/deleteReview';
+const UPDATE_REVIEW = 'reviews/updateReview';
 // =============== LOAD CURRENT SPOT REVIEWS =============== //
 const loadCurrentSpotReviews = (reviews) => {
     return {
@@ -58,15 +60,35 @@ export const deleteReviewThunk = reviewId => async dispatch => {
     }
 }
 
+// =============== UPDATE REVIEW =============== //
+
+const updateReviewAction = review => {
+    return {
+        type: UPDATE_REVIEW,
+        review
+    }
+}
+export const updateReviewThunk = review => async dispatch => {
+    const res = await csrfFetch(`/api/reviews/${review.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({...review})
+    })
+    if (res.ok) {
+        const review = await res.json();
+        dispatch(updateReviewAction(review))
+    }
+}
+
 // REDUCER
 
 const initialState = { spot: {}, user: {} };
 
 
 const reviewReducer = (state = initialState, action) => {
+    const newState = deepCopy(state);
     switch (action.type) {
         case LOAD_CURRENT_SPOT_REVIEWS: {
-            const newState = { spot: {}, user: {...state.user}};
+            // const newState = { spot: {}, user: {...state.user}};
             newState.spot = {}
             Object.values(action.reviews.Reviews).forEach(review => {
                 newState.spot[review.id] = review;
@@ -74,15 +96,22 @@ const reviewReducer = (state = initialState, action) => {
             return newState;
         }
         case CREATE_NEW_REVIEW: {
-            const newState = { ...state, spot: { ...state.spot } };
+            // const newState = { ...state, spot: { ...state.spot } };
             newState.spot[action.review.id] = action.review;
             return newState;
         }
         case DELETE_REVIEW: {
 
-            const newState = { ...state, spot: { ...state.spot } }
+            // const newState = { ...state, spot: { ...state.spot } }
 
             delete newState.spot[action.reviewId];
+            return newState;
+        }
+        case UPDATE_REVIEW: {
+            newState.spot[action.review.id].stars = action.review.stars;
+            newState.spot[action.review.id].review = action.review.review;
+
+
             return newState;
         }
         default:

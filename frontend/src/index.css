@@ -1,5 +1,5 @@
 /* TODO Add site wide styles */
-body {
+body, input, div, label, button, h1, h2, p, textarea {
     font-family: sans-serif;
 }
 h1 {
@@ -13,5 +13,8 @@ textarea {
 }
 
 .gold {
-    color: rgb(250, 115, 115);;
+    color: rgb(250, 115, 115);
+}
+.disabled  {
+    cursor: not-allowed !important
 }

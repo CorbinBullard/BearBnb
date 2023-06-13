@@ -7,8 +7,9 @@ input {
     width: 98%;
 }
 
-textarea {
+#review-text-area {
     width: 98%;
+    height: 300px;
 }
 
 button {
@@ -29,11 +30,12 @@ button:hover {
     font-size: xx-large;
     justify-content: space-around;
     display: flex;
+    cursor: pointer;
 }
 
 .filled {
     color: rgb(250, 115, 115);
-    
+
 }
 
 .empty {

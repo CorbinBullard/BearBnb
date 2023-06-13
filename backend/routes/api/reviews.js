@@ -27,17 +27,13 @@ router.get('/current', requireAuth, async (req, res) => {
 
     for (let i = 0; i < getReviews.length; i++) {
         const review = getReviews[i];
-        // console.log("REVIEW :   ",review)
-        // console.log("REVIEW ID:  ", review)
-        // const images = await ReviewImage.findAll({where: {reviewId: 1}})
+
         const reviewImgs = await review.getReviewImages({ attributes: ['id', 'url'] })
 
-        // const images = await ReviewImage.findAll({where: {reviewId: review.id}})
         const previewImage = await SpotImage.findOne({
             attributes: ['url'],
             where: {
                 preview: true
-
             }
         })
         const spotObj = { ...review.Spot.dataValues, previewImage: previewImage.url }
@@ -70,19 +66,23 @@ const validReviewData = [
     handleValidationErrors
 ]
 router.put('/:reviewId', requireAuth, validReviewData, async (req, res) => {
-    const {review, stars} = req.body;
+    const { review, stars } = req.body;
     const currReview = await Review.findByPk(req.params.reviewId);
-    if (!currReview) return res.status(404).json({ message: "Review couldn't be found"});
+    if (!currReview) return res.status(404).json({ message: "Review couldn't be found" });
 
     // check user permission
     const { user } = req;
     if (currReview.userId !== user.id) return res.status(403).json({ message: "Forbidden" });
 
-    await currReview.update({
+    const rev = await currReview.update({
         review, stars
-    })
+    });
 
-    res.json(currReview);
+    // const getReview = await Review.findByPk(rev.id, {
+    //     include: { model: User}
+    // })
+
+    res.json(rev);
 })
 
 // Delete a review from reviewId
@@ -97,14 +97,14 @@ router.delete('/:reviewId', requireAuth, async (req, res) => {
 
     await currReview.destroy();
 
-    res.json({message: "Successfully deleted"})
+    res.json({ message: "Successfully deleted" })
 })
 
 router.post('/:reviewId/images', requireAuth, async (req, res) => {
-    const {user} = req;
-    const  {url} = req.body;
+    const { user } = req;
+    const { url } = req.body;
     const review = await Review.findByPk(req.params.reviewId);
-    if (!review) return res.status(404).json({message: "Review couldn't be found"});
+    if (!review) return res.status(404).json({ message: "Review couldn't be found" });
     // console.log(review)
     if (review.dataValues.userId !== user.id) return res.status(403).json({ message: "Forbidden" });
 

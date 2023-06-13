@@ -1,0 +1,13 @@
+#booking-dates-container {
+    display: flex;
+    gap: 18px;
+}
+#booking-dates-container label {
+    font-weight: bold;
+}
+#booking-dates-container input {
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid rgb(130, 130, 130, 0.5);
+    height: 30px;
+}
