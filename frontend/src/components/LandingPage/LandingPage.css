@@ -1,8 +1,19 @@
 #landing-page-container {
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
 }
+
+#search-price-container {
+    /* align-self: flex-start; */
+    display: flex;
+    width: 30%;
+    gap: 20px;
+}
+
+
 
 .landingPage-spots {
     width: 84%;

@@ -138,7 +138,7 @@ router.get('/', async (req, res) => {
     let pagination = {};
     const where = {};
 
-    const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+    const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice, name } = req.query;
 
     //ERROR CHECK
     if (page && page < 1) errors.page = "Page must be greater than or equal to 1";
@@ -175,6 +175,13 @@ router.get('/', async (req, res) => {
     else {
         if (minPrice) where.price = { [Op.gte]: minPrice }
         if (maxPrice) where.price = { [Op.lte]: maxPrice }
+    }
+    if (name) {
+        console.log("NAME QUERY ----------------------------------------> ", name)
+        where[Op.or] = [{ name: { [Op.substring]: name } },
+        { city: { [Op.substring]: name } },
+        { address: { [Op.substring]: name } },
+        { state: { [Op.substring]: name } }]
     }
 
     //Check errors object
@@ -242,7 +249,7 @@ router.get('/', async (req, res) => {
 })
 
 // Create Image for a Spot ===============>
-router.post('/:spotId/images', singleMulterUpload('image'),requireAuth, async (req, res) => {
+router.post('/:spotId/images', singleMulterUpload('image'), requireAuth, async (req, res) => {
     const { url, preview } = req.body;
     const spot = await Spot.findByPk(req.params.spotId);
 
@@ -253,17 +260,14 @@ router.post('/:spotId/images', singleMulterUpload('image'),requireAuth, async (r
     if (spot.ownerId !== user.id) return res.status(403).json({ message: "Forbidden" });
 
     const key = await singleFileUpload({ file: req.file, public: true });
-    console.log("IMAGE FILE KEY : ---------------------------------------->", key)
+    // console.log("IMAGE FILE KEY : ---------------------------------------->", key)
+    // console.log("PREVIEW BOOL : -------------------------------------> ", preview)
 
     const img = await spot.createSpotImage({
         url: key,
-        preview: true
+        preview
     })
-    return res.json({
-        id: img.id,
-        url: img.url,
-        preview: img.preview
-    })
+    return res.json(img)
 })
 
 //Create Spot ===============>

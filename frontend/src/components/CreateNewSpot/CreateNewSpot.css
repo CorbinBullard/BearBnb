@@ -128,3 +128,19 @@
     border-radius: 8px;
     width: 102%;
 }
+
+.file-upload {
+    background: none !important;
+    border: 1px solid rgba(53, 53, 53, 0.7);
+    padding: 10px 0px !important;
+    border-radius: 10px;
+
+}
+
+.file-upload::-webkit-file-upload-button {
+    margin-left: 15px;
+    background-color: rgb(250, 115, 115);
+    color: aliceblue;
+    border-radius: 8px;
+    padding: 4px;
+}

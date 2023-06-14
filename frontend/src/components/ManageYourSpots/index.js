@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCurrentSpotThunk, fetchCurrentUserSpots } from "../../store/spots";
+import { fetchCurrentUserSpots } from "../../store/spots";
 import SpotCard from "../SpotCard";
 import { useHistory } from "react-router-dom";
 import OpenModalButton from "../OpenModalButton";
@@ -18,10 +18,7 @@ const ManageYourSpots = () => {
     const createSpot = () => {
         history.push("/spots/new");
     }
-    const handleDeleteSpot = (spotId) => {
 
-        // dispatch(deleteCurrentSpotThunk(spotId));
-    }
     const handleUpdate = spotId => {
         history.push(`/spots/${spotId}/edit`);
     }

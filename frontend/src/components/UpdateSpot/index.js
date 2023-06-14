@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { fetchCurrentSpotThunk, updateCurrentSpotThunk } from "../../store/spots";
 import "./UpdateSpot.css"
+import { csrfFetch } from "../../store/csrf";
 // import SpotForm from "../SpotForm";
 
 const UpdateSpot = () => {
     let currSpot;
-
+    const spot = useSelector(state => state.spots.singleSpot)
     const [country, setCountry] = useState('');
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
@@ -17,6 +18,8 @@ const UpdateSpot = () => {
     const [description, setDescription] = useState('');
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
+
+    const [preview, setPreview] = useState('');
 
     const [errors, setErrors] = useState({});
     const [submitWithErrors, setSubmitWithErrors] = useState(false);
@@ -30,22 +33,27 @@ const UpdateSpot = () => {
     const history = useHistory();
 
     useEffect(() => {
-
-        const promise = new Promise(resolve => resolve(dispatch(fetchCurrentSpotThunk(id))))
-        promise.then((spot) => {
-            currSpot = spot;
-            setCountry(spot.country);
-            setAddress(spot.address);
-            setCity(spot.city);
-            setState(spot.state);
-            setLat(spot.lat);
-            setLng(spot.lng);
-            setDescription(spot.description);
-            setName(spot.name);
-            setPrice(spot.price);
-        })
-
+        autoPopulate();
     }, [dispatch]);
+
+    async function autoPopulate() {
+        const spot = await dispatch(fetchCurrentSpotThunk(id));
+
+        currSpot = spot;
+        setCountry(spot.country);
+        setAddress(spot.address);
+        setCity(spot.city);
+        setState(spot.state);
+        setLat(spot.lat);
+        setLng(spot.lng);
+        setDescription(spot.description);
+        setName(spot.name);
+        setPrice(spot.price);
+        setPreview(spot.SpotImages.find(image => image.preview === true))
+        console.log(preview)
+
+    }
+
 
 
     useEffect(() => {
@@ -60,6 +68,7 @@ const UpdateSpot = () => {
         if (!name) errorsObj.name = "Name is required";
         if (!price) errorsObj.price = "Price is required";
         if (price && isNaN(+price)) errorsObj.price = "Price must be a number";
+        if (!preview) errorsObj.preview = "A preview Image is required"
 
         setErrors(errorsObj);
 
@@ -90,8 +99,26 @@ const UpdateSpot = () => {
         dispatch(updateCurrentSpotThunk(newSpot))
         history.push(`spots/${id}`);
     }
+    const deletePhoto = async (photoId) => {
+        await csrfFetch(`/api/spot-images/${photoId}`, {
+            method: 'DELETE'
+        })
+        setPreview('')
+    }
+    const uploadPhoto = async (file, preview) => {
 
+        const previewData = new FormData();
+        previewData.append("image", file);
+        previewData.append("preview", true);
+        const res = await csrfFetch(`/api/spots/${spot.id}/images`, {
+            method: 'POST',
+            body: previewData
+        })
+        console.log("NEW IMAGE RESULT -----------> ", res)
+        if (preview) setPreview(res)
+    }
 
+    if (!spot) return null;
 
     return (
         <form id="update-new-spot-form"
@@ -138,7 +165,7 @@ const UpdateSpot = () => {
                 {submitWithErrors && errors.description && <p className="form-errors">{errors.description}</p>}
             </div>
             <div className="update-spot-title">
-                <h3>update a title for your spot</h3>
+                <h3>Update a title for your spot</h3>
                 <p>Catch guests' attention with a spot title that highlights what makes your place special.</p>
                 <input type="text" placeholder="Name of your spot" onChange={e => setName(e.target.value)} value={name}></input>
                 {submitWithErrors && errors.name && <p className="form-errors">{errors.name}</p>}
@@ -151,7 +178,39 @@ const UpdateSpot = () => {
                 </div>
                 {submitWithErrors && errors.price && <p className="form-errors">{errors.price}</p>}
             </div>
+            <div id="create-spot-photos">
+                <h3>Liven up your spot with photos</h3>
+                <p>Submit a link to at least one photo to publish your spot</p>
+                <h3>Preview Image</h3>
+                <p>This image will be the first image that others see for your spot, so pick the photo that shows your spot in it's best light!</p>
+                {!preview ? (
+                    <div>
+                        <input
+                            className="file-upload"
+                            type="file"
+                            onChange={e => uploadPhoto(e.target.files[0], true)}
+                        />
+                        {/* <button type="button" onClick={() => {
 
+                            if (preview) uploadPhoto(preview, true);
+                        }}> upload</button> */}
+                    </div>
+                ) :
+                    (<span>
+                        <img src={preview.url} style={{width:'50px'}} />
+                        <button type="button" onClick={() => deletePhoto(preview.id)}>X</button>
+                    </span>)}
+                {submitWithErrors && errors.preview && <p className="form-errors">{errors.preview}</p>}
+
+                {/* <h3>Other Photos</h3>
+                <p>When others view your spot, they will be able to view these images</p>
+                <input
+                    className="file-upload"
+                    type="file"
+                    onChange={e => setPhotosArr(e.target.files)}
+                    multiple
+                /> */}
+            </div>
             <button id="update-new-spot-form-button">Update Spot</button>
         </form>
     )

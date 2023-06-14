@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllSpotsThunk } from "../../store/spots";
 import SpotCard from "../SpotCard";
@@ -7,7 +7,7 @@ import "./LandingPage.css"
 const LandingPage = () => {
     const dispatch = useDispatch();
     const spots = Object.values(useSelector(state => state.spots.allSpots));
-
+    
     useEffect(() => {
         dispatch(fetchAllSpotsThunk());
     }, [dispatch]);
@@ -15,6 +15,7 @@ const LandingPage = () => {
     if (!spots) return null;
 
     return (
+
         <div id="landing-page-container">
             <ul className="landingPage-spots">
                 {spots.map(spot => (

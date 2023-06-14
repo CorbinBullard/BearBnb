@@ -17,6 +17,7 @@ const CreateNewSpot = () => {
     const [price, setPrice] = useState('');
 
     const [preview, setPreview] = useState('');
+    const [photosArr, setPhotosArr] = useState([]);
 
 
     const [errors, setErrors] = useState({});
@@ -38,26 +39,12 @@ const CreateNewSpot = () => {
         if (!price) errorsObj.price = "Price is required";
         if (price && isNaN(+price)) errorsObj.price = "Price must be a number";
         if (!preview) errorsObj.preview = "Preview image is required";
-        // if (preview && !isValidUrl(preview)) errorsObj.preview = "Image URL must end in .png, .jpg, or .jpeg";
-        // if (img1 && !isValidUrl(img1)) errorsObj.img1 = "Image URL must end in .png, .jpg, or .jpeg";
-        // if (img2 && !isValidUrl(img2)) errorsObj.img2 = "Image URL must end in .png, .jpg, or .jpeg";
-        // if (img3 && !isValidUrl(img3)) errorsObj.img3 = "Image URL must end in .png, .jpg, or .jpeg";
-        // if (img4 && !isValidUrl(img4)) errorsObj.img4 = "Image URL must end in .png, .jpg, or .jpeg";
-
-        setErrors(errorsObj);
 
 
-    }, [country, address, city, state, lat, lng, description, name, price, preview])
 
-    const isValidUrl = (url) => {
-        const imageFormatTypes = ['jpg', 'jpeg', 'png'];
-        const urlArr = url.split('.');
-        if (imageFormatTypes.includes(urlArr[urlArr.length - 1])) return true;
-        else {
-            console.log("suffix: ", urlArr[urlArr.length - 1])
-            return false
-        };
-    }
+
+    }, [country, address, city, state, lat, lng, description, name, price, preview, photosArr])
+
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -76,53 +63,31 @@ const CreateNewSpot = () => {
             description,
             price
         }
-        
+
         const spot = await dispatch(postNewSpotThunk(newSpot));
         console.log("PREVIEW IMAGE : ", preview)
-        const formData = new FormData();
-        formData.append("image", preview)
-        formData.append("preview", true)
-        console.log("FORM DATA : ----> ", formData)
+        const previewData = new FormData();
+        previewData.append("image", preview)
+        previewData.append("preview", true)
+        console.log("FORM DATA : ----> ", previewData)
 
         await csrfFetch(`/api/spots/${spot.id}/images`, {
             method: 'POST',
-            body: formData
+            body: previewData
         })
+        for (let file of photosArr) {
+            const photoData = new FormData();
+            photoData.append('image', file);
+            photoData.append('preview', false);
+            await csrfFetch(`/api/spots/${spot.id}/images`, {
+                method: 'POST',
+                body: photoData
+            })
+        }
 
         history.push(`/spots/${spot.id}`)
 
     }
-    // const submitImages = async (id) => {
-    //     console.log("IMAGES", img1, img2, img3, img4)
-    //     await csrfFetch(`/api/spots/${id}/images`, {
-    //         method: 'POST',
-    //         body: JSON.stringify({ url: preview, preview: true })
-    //     })
-    //     if (img1) {
-    //         await csrfFetch(`/api/spots/${id}/images`, {
-    //             method: 'POST',
-    //             body: JSON.stringify({ url: img1, preview: false })
-    //         })
-    //     }
-    //     if (img2) {
-    //         await csrfFetch(`/api/spots/${id}/images`, {
-    //             method: 'POST',
-    //             body: JSON.stringify({ url: img2, preview: false })
-    //         })
-    //     }
-    //     if (img3) {
-    //         await csrfFetch(`/api/spots/${id}/images`, {
-    //             method: 'POST',
-    //             body: JSON.stringify({ url: img3, preview: false })
-    //         })
-    //     }
-    //     if (img4) {
-    //         await csrfFetch(`/api/spots/${id}/images`, {
-    //             method: 'POST',
-    //             body: JSON.stringify({ url: img4, preview: false })
-    //         })
-    //     }
-    // }
 
     return (
         <form id="create-new-spot-form"
@@ -189,12 +154,22 @@ const CreateNewSpot = () => {
             <div id="create-spot-photos">
                 <h3>Liven up your spot with photos</h3>
                 <p>Submit a link to at least one photo to publish your spot</p>
+                <h3>Preview Image</h3>
+                <p>This image will be the first image that others see for your spot, so pick the photo that shows your spot in it's best light!</p>
                 <input
+                    className="file-upload"
                     type="file"
                     onChange={e => setPreview(e.target.files[0])}
-                    multiple
                 />
                 {submitWithErrors && errors.preview && <p className="form-errors">{errors.preview}</p>}
+                <h3>Other Photos</h3>
+                <p>When others view your spot, they will be able to view these images</p>
+                <input
+                    className="file-upload"
+                    type="file"
+                    onChange={e => setPhotosArr(e.target.files)}
+                    multiple
+                />
             </div>
             <button id="create-new-spot-form-button">Create Spot</button>
         </form>
