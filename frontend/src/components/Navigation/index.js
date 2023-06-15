@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import logo from '../../assets/Bearbnb.png'
 import './Navigation.css';
 import SearchBar from '../SearchBar';
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import { fetchAllSpotsThunk } from '../../store/spots';
 
 function Navigation({ isLoaded }) {
     const sessionUser = useSelector(state => state.session.user);
@@ -14,12 +15,13 @@ function Navigation({ isLoaded }) {
     const [max, setMax] = useState('');
     const location = useLocation();
     console.log('LOCATION -------> : ', location)
+    const dispatch = useDispatch()
 
     return (
         <div id='nav-page-container'>
             <ul id='nav-container'>
                 <li id='nav-home-button-icon'>
-                    <NavLink exact to="/" className='nav-home-button'><img src={logo} className='logo-image' /></NavLink>
+                    <NavLink exact to="/" className='nav-home-button'><img src={logo} className='logo-image' onClick={() => dispatch(fetchAllSpotsThunk())}/></NavLink>
                 </li>
                 {isLoaded && (
                     <>

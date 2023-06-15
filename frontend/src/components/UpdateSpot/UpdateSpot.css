@@ -130,3 +130,11 @@
     border-radius: 8px;
     width: 102%;
 }
+#update-current-preview-img {
+    /* border: 1px solid black; */
+    width: 100%;
+    align-self: center;
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+}

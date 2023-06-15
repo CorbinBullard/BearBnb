@@ -65,6 +65,7 @@
 .non-preview-image {
     width: 50%;
     height: 50%;
+    object-fit: cover;
 }
 
 .name-description {
@@ -147,5 +148,3 @@
     color: aliceblue;
     border-radius: 8px;
 }
-
-

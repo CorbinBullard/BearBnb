@@ -16,6 +16,7 @@
 
 
 .landingPage-spots {
+    align-self: center !important;
     width: 84%;
     display: flex;
     flex-wrap: wrap;

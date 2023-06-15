@@ -8,6 +8,7 @@ import { csrfFetch } from "../../store/csrf";
 
 const UpdateSpot = () => {
     let currSpot;
+
     const spot = useSelector(state => state.spots.singleSpot)
     const [country, setCountry] = useState('');
     const [address, setAddress] = useState('');
@@ -20,9 +21,11 @@ const UpdateSpot = () => {
     const [price, setPrice] = useState(0);
 
     const [preview, setPreview] = useState('');
+    const [changePreviewImg, setChangePreviewImg] = useState(false);
 
     const [errors, setErrors] = useState({});
     const [submitWithErrors, setSubmitWithErrors] = useState(false);
+    const lastPreviewImg = spot?.SpotImages?.find(image => image.preview);
 
 
     const params = useParams();
@@ -51,7 +54,6 @@ const UpdateSpot = () => {
         setPrice(spot.price);
         setPreview(spot.SpotImages.find(image => image.preview === true));
         console.log(preview)
-
     }
 
 
@@ -74,7 +76,7 @@ const UpdateSpot = () => {
 
 
 
-    }, [country, address, city, state, lat, lng, description, name, price])
+    }, [country, address, city, state, lat, lng, description, name, price, preview])
 
 
     const handleSubmit = async e => {
@@ -96,6 +98,11 @@ const UpdateSpot = () => {
             price
         }
 
+        if (changePreviewImg) {
+            deletePhoto(lastPreviewImg.id)
+                .then(uploadPhoto(preview, true));
+        };
+
         dispatch(updateCurrentSpotThunk(newSpot))
         history.push(`spots/${id}`);
     }
@@ -103,13 +110,13 @@ const UpdateSpot = () => {
         await csrfFetch(`/api/spot-images/${photoId}`, {
             method: 'DELETE'
         })
-        setPreview('')
+
     }
     const uploadPhoto = async (file, preview) => {
 
         const previewData = new FormData();
         previewData.append("image", file);
-        previewData.append("preview", true);
+        previewData.append("preview", preview);
         const res = await csrfFetch(`/api/spots/${spot.id}/images`, {
             method: 'POST',
             body: previewData
@@ -183,12 +190,12 @@ const UpdateSpot = () => {
                 <p>Submit a link to at least one photo to publish your spot</p>
                 <h3>Preview Image</h3>
                 <p>This image will be the first image that others see for your spot, so pick the photo that shows your spot in it's best light!</p>
-                {!preview ? (
+                {changePreviewImg ? (
                     <div>
                         <input
                             className="file-upload"
                             type="file"
-                            onChange={e => uploadPhoto(e.target.files[0], true)}
+                            onChange={e => setPreview(e.target.files[0], true)}
                         />
                         {/* <button type="button" onClick={() => {
 
@@ -196,10 +203,13 @@ const UpdateSpot = () => {
                         }}> upload</button> */}
                     </div>
                 ) :
-                    (<span>
-                        <img src={preview.url} style={{width:'50px'}} />
-                        <button type="button" onClick={() => deletePhoto(preview.id)}>X</button>
-                    </span>)}
+                    (<div id="update-current-preview-img">
+                        <img src={preview.url} style={{ width: '100%', borderRadius: '10px' }} />
+                        <button type="button" onClick={() => {
+                            setChangePreviewImg(true)
+                            setPreview('')
+                        }}>Change Preview Image</button>
+                    </div>)}
                 {submitWithErrors && errors.preview && <p className="form-errors">{errors.preview}</p>}
 
                 {/* <h3>Other Photos</h3>
