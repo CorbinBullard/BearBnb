@@ -26,9 +26,9 @@ export const fetchAllSpotsThunk = () => async (dispatch) => {
 export const fetchQueriedSpotsThunk = (query) => async (dispatch) => {
     const { name, min, max } = query;
     let string = '';
-    if (name) string += 'name=' + name + '&';
-    if (min) string += 'minPrice=' + min + '&';
-    if (max) string += 'maxPrice=' + max;
+    if (name) string += 'name=' + name;
+    // if (min) string += 'minPrice=' + min + '&';
+    // if (max) string += 'maxPrice=' + max;
     const res = await fetch(`/api/spots?${string}`);
     if (res.ok) {
         const spots = await res.json();
