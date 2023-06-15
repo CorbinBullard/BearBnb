@@ -8,20 +8,21 @@
     width: 60%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
+    align-items: center;
 }
 
 
 /* My Booking Card */
 
 .my-bookings-card-container {
+    width: 100%;
+    min-width: 700px;
     border: 1px solid rgb(130, 130, 130, 0.5);
     border-radius: 10px;
     display: flex;
 }
-.my-bookings-card-info-container {
 
-}
 .my-bookings-card-right-side {
     margin-left: 20px;
     display: flex;

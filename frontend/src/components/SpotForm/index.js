@@ -9,7 +9,6 @@ const SpotForm = ({ spot }) => {
     const params = useParams();
     const spotId = params.id;
 
-    console.log("SPOT: ", spot)
 
     const [country, setCountry] = useState(spot.country);
     const [address, setAddress] = useState(spot.address);
@@ -26,7 +25,7 @@ const SpotForm = ({ spot }) => {
     const [img2, setImg2] = useState('');
     const [img3, setImg3] = useState('');
     const [img4, setImg4] = useState('');
-    console.log(spot)
+
     const [errors, setErrors] = useState({});
     const [submitWithErrors, setSubmitWithErrors] = useState(false);
     const dispatch = useDispatch();
@@ -39,7 +38,6 @@ const SpotForm = ({ spot }) => {
 
 
     useEffect(() => {
-        console.log("FORM EFFECT")
         const errorsObj = {}
         if (!country) errorsObj.country = "Country is required";
         if (!address) errorsObj.address = "Address is required";
@@ -67,7 +65,6 @@ const SpotForm = ({ spot }) => {
         const urlArr = url.split('.');
         if (imageFormatTypes.includes(urlArr[urlArr.length - 1])) return true;
         else {
-            console.log("suffix: ", urlArr[urlArr.length - 1])
             return false
         };
     }

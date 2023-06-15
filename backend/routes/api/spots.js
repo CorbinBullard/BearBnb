@@ -5,6 +5,7 @@ const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../d
 const { requireAuth } = require('../../utils/auth.js');
 const { handleValidationErrors } = require('../../utils/validation.js');
 const { check } = require('express-validator');
+const { singleMulterUpload, multipleMulterUpload, singleFileUpload } = require('../../aws');
 
 
 
@@ -38,7 +39,6 @@ router.get('/current', requireAuth, async (req, res) => {
             }
         })
         const url = image === null ? null : image.dataValues.url
-        // console.log("URL :  ", url)
 
         let spotObj = {
             id: spot.id,
@@ -57,11 +57,9 @@ router.get('/current', requireAuth, async (req, res) => {
             avgRating: sum / count,
             previewImage: url
         }
-        // console.log(spotObj)
         Spots.push(spotObj)
     };
 
-    // console.log(Spots)
 
 
     res.json({ Spots });
@@ -89,7 +87,7 @@ router.get('/:spotId', async (req, res) => {
     })
 
     const owner = await spot.getUser({ attributes: ['id', 'firstName', 'lastName'] });
-    console.log(owner.toJSON())
+
 
     let spotObj = {
         id: spot.id,
@@ -137,7 +135,7 @@ router.get('/', async (req, res) => {
     let pagination = {};
     const where = {};
 
-    const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+    const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice, name } = req.query;
 
     //ERROR CHECK
     if (page && page < 1) errors.page = "Page must be greater than or equal to 1";
@@ -175,6 +173,12 @@ router.get('/', async (req, res) => {
         if (minPrice) where.price = { [Op.gte]: minPrice }
         if (maxPrice) where.price = { [Op.lte]: maxPrice }
     }
+    if (name) {
+        where[Op.or] = [{ name: { [Op.substring]: name } },
+        { city: { [Op.substring]: name } },
+        { address: { [Op.substring]: name } },
+        { state: { [Op.substring]: name } }]
+    }
 
     //Check errors object
     if (Object.keys(errors).length) return res.status(400).json({ message: "Bad request", errors })
@@ -207,7 +211,6 @@ router.get('/', async (req, res) => {
             }
         })
         const url = image === null ? null : image.dataValues.url
-        // console.log("URL :  ", url)
 
         let spotObj = {
             id: spot.id,
@@ -226,11 +229,9 @@ router.get('/', async (req, res) => {
             avgRating: sum / count,
             previewImage: url
         }
-        // console.log(spotObj)
         Spots.push(spotObj)
     };
 
-    // console.log(Spots)
 
 
     res.json({
@@ -241,7 +242,7 @@ router.get('/', async (req, res) => {
 })
 
 // Create Image for a Spot ===============>
-router.post('/:spotId/images', requireAuth, async (req, res) => {
+router.post('/:spotId/images', singleMulterUpload('image'), requireAuth, async (req, res) => {
     const { url, preview } = req.body;
     const spot = await Spot.findByPk(req.params.spotId);
 
@@ -251,15 +252,13 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
     const { user } = req;
     if (spot.ownerId !== user.id) return res.status(403).json({ message: "Forbidden" });
 
+    const key = await singleFileUpload({ file: req.file, public: true });
+
     const img = await spot.createSpotImage({
-        url,
+        url: key,
         preview
     })
-    return res.json({
-        id: img.id,
-        url: img.url,
-        preview: img.preview
-    })
+    return res.json(img)
 })
 
 //Create Spot ===============>
@@ -443,9 +442,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
 
     const bookings = await spot.getBookings();
 
-    // console.log(spot.dataValues.ownerId, user.id)
     const bookingsArr = [];
-    console.log("HERE ==================================")
 
     if (spot.dataValues.ownerId === user.id) { // IS OWNER
 
@@ -514,7 +511,6 @@ router.post('/:spotId/bookings', requireAuth, validateDates, async (req, res, ne
 
     if (spot.dataValues.ownerId === user.id) return res.status(403).json({ message: "Cannot book your own Spot" })
     // Check if end Date is after start Date
-    // console.log(start.getTime(), end.getTime())
 
     if (start.getTime() > end.getTime()) {
 
@@ -531,8 +527,6 @@ router.post('/:spotId/bookings', requireAuth, validateDates, async (req, res, ne
         const currStartingDate = new Date(booking.startDate);
         const currEndingDate = new Date(booking.endDate);
 
-        // console.log(start.getTime(), currStartingDate.getTime(), currEndingDate.getTime())
-        // console.log(start.getTime() >= currStartingDate.getTime() && start.getTime() <= currEndingDate.getTime())
 
         if (start.getTime() >= currStartingDate.getTime() && start.getTime() <= currEndingDate.getTime()) {
             errors.startDate = "Start date conflicts with an existing booking";

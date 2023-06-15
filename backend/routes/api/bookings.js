@@ -18,7 +18,7 @@ router.get('/current', requireAuth, async (req, res) => {
         where: { userId: user.id },
         include: { model: Spot, attributes: { exclude: ['createdAt', 'updatedAt', 'description'] } }
     });
-    // console.log(bookings)
+
     if (!bookings.length) return res.json({ Bookings: [] })
 
     for (let i = 0; i < bookings.length; i++) {
@@ -44,7 +44,6 @@ router.get('/current', requireAuth, async (req, res) => {
                 previewImage: "No image found"
             }
         }
-        // console.log(booking.startDate, booking.endDate)
         const obj = {
             id: booking.id,
             spotId: booking.spotId,
@@ -97,11 +96,9 @@ router.put('/:bookingId', requireAuth, validateDates, async (req, res) => {
     // Check if current Spot is already booked
     const currentBookings = await spot.getBookings({ where: { id: { [Op.not]: booking.dataValues.id } } });
 
-    // console.log(booking.dataValues.id)
 
     for (let i = 0; i < currentBookings.length; i++) {
         const _booking = currentBookings[i];
-        // console.log(_booking.dataValues.id)
 
         const currStartingDate = new Date(_booking.dataValues.startDate);
         const currEndingDate = new Date(_booking.dataValues.endDate);
@@ -127,7 +124,7 @@ router.put('/:bookingId', requireAuth, validateDates, async (req, res) => {
         startDate: start,
         endDate: end
     })
-    
+
 
 
     res.json(newBooking)

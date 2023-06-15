@@ -22,6 +22,19 @@ export const fetchAllSpotsThunk = () => async (dispatch) => {
         dispatch(loadSpots(spots));
     }
 }
+// LOAD QUERIED SPOTS //
+export const fetchQueriedSpotsThunk = (query) => async (dispatch) => {
+    const { name, min, max } = query;
+    let string = '';
+    if (name) string += 'name=' + name + '&';
+    if (min) string += 'minPrice=' + min + '&';
+    if (max) string += 'maxPrice=' + max;
+    const res = await fetch(`/api/spots?${string}`);
+    if (res.ok) {
+        const spots = await res.json();
+        dispatch(loadSpots(spots));
+    }
+}
 
 // =============== LOAD CURRENT SPOT =============== //
 
@@ -50,7 +63,8 @@ const createNewSpot = (spot) => {
 }
 
 export const postNewSpotThunk = (spot) => async (dispatch) => {
-    const {address, city, state, country, lat, lng, name, description, price} = spot;
+
+    const { address, city, state, country, lat, lng, name, description, price } = spot;
     const res = await csrfFetch('/api/spots', {
         method: 'POST',
         body: JSON.stringify({ address, city, state, country, lat, lng, name, description, price })
@@ -108,14 +122,14 @@ export const updateCurrentSpotThunk = spot => async dispatch => {
 
 // REDUCER
 
-const initialState = {allSpots: {}, singleSpot: {}};
+const initialState = { allSpots: {}, singleSpot: {} };
 
 
 const spotReducer = (state = initialState, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case LOAD_ALL_SPOTS: {
             // const newState = {...state};
-            const newState = {...state, allSpots: {}, singleSpot: {}};
+            const newState = { ...state, allSpots: {}, singleSpot: {} };
             action.spots.Spots.forEach(spot => {
                 newState.allSpots[spot.id] = spot
             });
@@ -123,17 +137,17 @@ const spotReducer = (state = initialState, action) => {
             return newState;
         }
         case LOAD_CURRENT_SPOT: {
-            const newState = {...state, singleSpot: {}};
+            const newState = { ...state, singleSpot: {} };
             newState.singleSpot = action.spot;
             return newState;
         }
         case DELETE_SPOT: {
-            const newState = {allSpots: { ...state.allSpots }, singleSpot: {} }
+            const newState = { allSpots: { ...state.allSpots }, singleSpot: {} }
             delete newState.allSpots[action.spotId];
             return newState;
         }
         case UPDATE_SPOT: {
-            const newState = {allSpots: {...state.allSpots}, singleSpot: {}}
+            const newState = { allSpots: { ...state.allSpots }, singleSpot: {} }
             newState.singleSpot = action.spot;
             return newState;
         }

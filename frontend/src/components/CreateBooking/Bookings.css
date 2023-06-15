@@ -1,6 +1,7 @@
 #booking-dates-container {
     display: flex;
     gap: 18px;
+    
 }
 #booking-dates-container label {
     font-weight: bold;

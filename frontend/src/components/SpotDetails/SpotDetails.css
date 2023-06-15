@@ -65,10 +65,12 @@
 .non-preview-image {
     width: 50%;
     height: 50%;
+    object-fit: cover;
 }
 
 .name-description {
     width: 70%;
+    margin-right: 15px;
 }
 
 .price-stars {
@@ -147,5 +149,3 @@
     color: aliceblue;
     border-radius: 8px;
 }
-
-

@@ -12,7 +12,6 @@ const MyBookings = () => {
         dispatch(fetchUserBookingsThunk())
     }, [])
 
-    console.log(bookings);
     if (!bookings) return null;
     return (
         <div id="MyBookings-page">
@@ -22,8 +21,9 @@ const MyBookings = () => {
                     (bookings.map(booking => (
                         <BookingCard key={booking.id} booking={booking} spot={booking.Spot} />
                     ))) :
-                    (<div>
+                    (<div id="no-bookings-div">
                         <h1>Looks like you have no bookings at this time...</h1>
+                        <img src="https://img.freepik.com/free-vector/honeycomb-house-with-two-bears-cartoon-style-white-background_1308-46614.jpg" />
                     </div>)
                 }
             </div>

@@ -35,7 +35,6 @@ const SpotDetails = () => {
         }
         setHasPosted(false);
     }, [hasPosted, reviews]);
-    // console.log("reviews Array: ", reviews)
 
 
     if (!Object.entries(spot).length || !spot.SpotImages) return null;
@@ -43,18 +42,13 @@ const SpotDetails = () => {
 
     // const reviews = Object.values(reviews);
     const nonPreviewImgArr = spot?.SpotImages.filter(spot => {
-        // console.log(spot.preview)
         return spot.preview === false
     });
-    // console.log("NON PREV", nonPreviewImgArr);
     const previewImage = spot?.SpotImages.find(image => image.preview === true);
     const previewURL = previewImage ? previewImage.url : "no-url"
 
 
     const canPostReview = (user && spot.ownerId !== user?.id && !hasPosted);
-
-    console.log("Num Reviews: ", spot.numReviews)
-
 
     return (
         <div id="spot-details-container">

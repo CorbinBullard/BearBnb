@@ -23,7 +23,6 @@ router.get('/current', requireAuth, async (req, res) => {
         include: [{ model: User, attributes: ['id', 'firstName', 'lastName'] },
         { model: Spot, attributes: { exclude: ['createdAt', 'updatedAt', 'description'] } }]
     })
-    // console.log("REVIEWS :  ", getReviews)
 
     for (let i = 0; i < getReviews.length; i++) {
         const review = getReviews[i];
@@ -105,7 +104,6 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
     const { url } = req.body;
     const review = await Review.findByPk(req.params.reviewId);
     if (!review) return res.status(404).json({ message: "Review couldn't be found" });
-    // console.log(review)
     if (review.dataValues.userId !== user.id) return res.status(403).json({ message: "Forbidden" });
 
     const newImage = await review.createReviewImage({

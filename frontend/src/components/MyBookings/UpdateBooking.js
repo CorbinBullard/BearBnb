@@ -31,7 +31,6 @@ const UpdateBooking = ({ booking, spot }) => {
             for (let i = 0; i < bookings.length; i++) {
                 const _booking = bookings[i];
                 if (_booking.id === booking.id) continue;
-                console.log(_booking)
                 const currStart = _booking.startDate.split('-').join('');
                 const currEnd = _booking.endDate.split('-').join('');
 
