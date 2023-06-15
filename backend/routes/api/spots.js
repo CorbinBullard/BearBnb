@@ -174,10 +174,10 @@ router.get('/', async (req, res) => {
         if (maxPrice) where.price = { [Op.lte]: maxPrice }
     }
     if (name) {
-        where[Op.or] = [{ name: { [Op.substring]: name } },
-        { city: { [Op.substring]: name } },
-        { address: { [Op.substring]: name } },
-        { state: { [Op.substring]: name } }]
+        where[Op.or] = [{ name: { [Op.iLike]: `%${name}` } },
+        { city: { [Op.iLike]: `%${name}` } },
+        { address: { [Op.iLike]: `%${name}` } },
+        { state: { [Op.iLike]: `%${name}` } }]
     }
 
     //Check errors object

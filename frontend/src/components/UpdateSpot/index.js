@@ -197,6 +197,7 @@ const UpdateSpot = () => {
                             className="file-upload"
                             type="file"
                             onChange={e => setPreview(e.target.files[0], true)}
+                            accept=".jpg, .jpeg, .png"
                         />
                         {/* <button type="button" onClick={() => {
 
