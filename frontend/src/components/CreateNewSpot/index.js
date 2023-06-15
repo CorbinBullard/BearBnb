@@ -39,7 +39,7 @@ const CreateNewSpot = () => {
         if (!price) errorsObj.price = "Price is required";
         if (price && isNaN(+price)) errorsObj.price = "Price must be a number";
         if (!preview) errorsObj.preview = "Preview image is required";
-
+        setErrors(errorsObj)
 
 
 
@@ -158,6 +158,7 @@ const CreateNewSpot = () => {
                     className="file-upload"
                     type="file"
                     onChange={e => setPreview(e.target.files[0])}
+                    accept=".jpg, .jpeg, .png"
                 />
                 {submitWithErrors && errors.preview && <p className="form-errors">{errors.preview}</p>}
                 <h3>Other Photos</h3>
@@ -167,6 +168,7 @@ const CreateNewSpot = () => {
                     type="file"
                     onChange={e => setPhotosArr(e.target.files)}
                     multiple
+                    accept=".jpg, .jpeg, .png"
                 />
             </div>
             <button id="create-new-spot-form-button">Create Spot</button>
