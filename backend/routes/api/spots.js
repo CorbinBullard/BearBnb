@@ -260,8 +260,6 @@ router.post('/:spotId/images', singleMulterUpload('image'), requireAuth, async (
     if (spot.ownerId !== user.id) return res.status(403).json({ message: "Forbidden" });
 
     const key = await singleFileUpload({ file: req.file, public: true });
-    // console.log("IMAGE FILE KEY : ---------------------------------------->", key)
-    // console.log("PREVIEW BOOL : -------------------------------------> ", preview)
 
     const img = await spot.createSpotImage({
         url: key,

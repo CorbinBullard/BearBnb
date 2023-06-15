@@ -5,13 +5,15 @@ import ProfileButton from './ProfileButton';
 import logo from '../../assets/Bearbnb.png'
 import './Navigation.css';
 import SearchBar from '../SearchBar';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 
 function Navigation({ isLoaded }) {
     const sessionUser = useSelector(state => state.session.user);
 
     const [min, setMin] = useState('');
     const [max, setMax] = useState('');
-
+    const location = useLocation();
+    console.log('LOCATION -------> : ', location)
 
     return (
         <div id='nav-page-container'>
@@ -21,9 +23,9 @@ function Navigation({ isLoaded }) {
                 </li>
                 {isLoaded && (
                     <>
-                        <li>
+                        {location.pathname === '/' && <li>
                             <SearchBar />
-                        </li>
+                        </li>}
                         <li className='nav-profile-button'>
                             {sessionUser && <NavLink to={'/spots/new'} className='create-a-new-spot'>Create a New Spot</NavLink>}
                             <ProfileButton id="profile-button" user={sessionUser} />

@@ -49,7 +49,7 @@ const UpdateSpot = () => {
         setDescription(spot.description);
         setName(spot.name);
         setPrice(spot.price);
-        setPreview(spot.SpotImages.find(image => image.preview === true))
+        setPreview(spot.SpotImages.find(image => image.preview === true));
         console.log(preview)
 
     }
@@ -114,8 +114,8 @@ const UpdateSpot = () => {
             method: 'POST',
             body: previewData
         })
-        console.log("NEW IMAGE RESULT -----------> ", res)
-        if (preview) setPreview(res)
+
+        // if (preview) setPreview(res)
     }
 
     if (!spot) return null;
