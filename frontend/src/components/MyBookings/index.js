@@ -12,7 +12,6 @@ const MyBookings = () => {
         dispatch(fetchUserBookingsThunk())
     }, [])
 
-    console.log(bookings);
     if (!bookings) return null;
     return (
         <div id="MyBookings-page">

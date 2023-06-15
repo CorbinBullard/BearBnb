@@ -117,7 +117,6 @@ const bookingsReducer = (state = initialState, action) => {
             newState.userBookings = {};
             if (action.bookings.Bookings.length) {
                 action.bookings.Bookings.forEach(booking => {
-                    console.log("BOOKING: ", booking)
                     newState.userBookings[booking.id] = booking;
                 });
             }

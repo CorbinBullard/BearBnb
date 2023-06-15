@@ -23,6 +23,8 @@ const UpdateSpot = () => {
     const [preview, setPreview] = useState('');
     const [changePreviewImg, setChangePreviewImg] = useState(false);
 
+
+
     const [errors, setErrors] = useState({});
     const [submitWithErrors, setSubmitWithErrors] = useState(false);
     const lastPreviewImg = spot?.SpotImages?.find(image => image.preview);
@@ -53,7 +55,7 @@ const UpdateSpot = () => {
         setName(spot.name);
         setPrice(spot.price);
         setPreview(spot.SpotImages.find(image => image.preview === true));
-        console.log(preview)
+        // setPhotosArr(spot.SpotImages.filter(image => !image.preview))
     }
 
 
@@ -110,7 +112,6 @@ const UpdateSpot = () => {
         await csrfFetch(`/api/spot-images/${photoId}`, {
             method: 'DELETE'
         })
-
     }
     const uploadPhoto = async (file, preview) => {
 
@@ -214,10 +215,13 @@ const UpdateSpot = () => {
 
                 {/* <h3>Other Photos</h3>
                 <p>When others view your spot, they will be able to view these images</p>
+                {photosArr.map(image => (
+                    <img src={image} />
+                ))}
                 <input
                     className="file-upload"
                     type="file"
-                    onChange={e => setPhotosArr(e.target.files)}
+                    onChange={e => setPhotosArr(Array(e.target.files))}
                     multiple
                 /> */}
             </div>

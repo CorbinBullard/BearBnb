@@ -39,7 +39,6 @@ router.get('/current', requireAuth, async (req, res) => {
             }
         })
         const url = image === null ? null : image.dataValues.url
-        // console.log("URL :  ", url)
 
         let spotObj = {
             id: spot.id,
@@ -58,11 +57,9 @@ router.get('/current', requireAuth, async (req, res) => {
             avgRating: sum / count,
             previewImage: url
         }
-        // console.log(spotObj)
         Spots.push(spotObj)
     };
 
-    // console.log(Spots)
 
 
     res.json({ Spots });
@@ -90,7 +87,7 @@ router.get('/:spotId', async (req, res) => {
     })
 
     const owner = await spot.getUser({ attributes: ['id', 'firstName', 'lastName'] });
-    console.log(owner.toJSON())
+
 
     let spotObj = {
         id: spot.id,
@@ -177,7 +174,6 @@ router.get('/', async (req, res) => {
         if (maxPrice) where.price = { [Op.lte]: maxPrice }
     }
     if (name) {
-        console.log("NAME QUERY ----------------------------------------> ", name)
         where[Op.or] = [{ name: { [Op.substring]: name } },
         { city: { [Op.substring]: name } },
         { address: { [Op.substring]: name } },
@@ -215,7 +211,6 @@ router.get('/', async (req, res) => {
             }
         })
         const url = image === null ? null : image.dataValues.url
-        // console.log("URL :  ", url)
 
         let spotObj = {
             id: spot.id,
@@ -234,11 +229,9 @@ router.get('/', async (req, res) => {
             avgRating: sum / count,
             previewImage: url
         }
-        // console.log(spotObj)
         Spots.push(spotObj)
     };
 
-    // console.log(Spots)
 
 
     res.json({
@@ -449,9 +442,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
 
     const bookings = await spot.getBookings();
 
-    // console.log(spot.dataValues.ownerId, user.id)
     const bookingsArr = [];
-    console.log("HERE ==================================")
 
     if (spot.dataValues.ownerId === user.id) { // IS OWNER
 
@@ -520,7 +511,6 @@ router.post('/:spotId/bookings', requireAuth, validateDates, async (req, res, ne
 
     if (spot.dataValues.ownerId === user.id) return res.status(403).json({ message: "Cannot book your own Spot" })
     // Check if end Date is after start Date
-    // console.log(start.getTime(), end.getTime())
 
     if (start.getTime() > end.getTime()) {
 
@@ -537,8 +527,6 @@ router.post('/:spotId/bookings', requireAuth, validateDates, async (req, res, ne
         const currStartingDate = new Date(booking.startDate);
         const currEndingDate = new Date(booking.endDate);
 
-        // console.log(start.getTime(), currStartingDate.getTime(), currEndingDate.getTime())
-        // console.log(start.getTime() >= currStartingDate.getTime() && start.getTime() <= currEndingDate.getTime())
 
         if (start.getTime() >= currStartingDate.getTime() && start.getTime() <= currEndingDate.getTime()) {
             errors.startDate = "Start date conflicts with an existing booking";

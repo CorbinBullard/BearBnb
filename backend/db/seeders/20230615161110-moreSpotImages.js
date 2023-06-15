@@ -10,8 +10,13 @@ module.exports = {
     await queryInterface.bulkInsert(options, [
       {
         spotId: 4,
-        url: `https://www.decorilla.com/online-decorating/wp-content/uploads/2019/01/cozy-traditional-cottage-interior-design.jpg`,
+        url: `https://i2-prod.birminghammail.co.uk/incoming/article25552386.ece/ALTERNATES/s1200b/1_AB_Bham20221118_Ipsleyhouse.jpg`,
         preview: true
+      },
+      {
+        spotId: 4,
+        url: `https://www.decorilla.com/online-decorating/wp-content/uploads/2019/01/cozy-traditional-cottage-interior-design.jpg`,
+        preview: false
       },
       {
         spotId: 4,

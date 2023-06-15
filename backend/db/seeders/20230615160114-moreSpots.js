@@ -27,7 +27,7 @@ module.exports = {
         country: 'England',
         lat: 10.00,
         lng: 12.00,
-        name: 'House',
+        name: 'Birmingham Charmer',
         description: 'Come and enjoy your stay at this quaint, lovely home in the heart of our beloved Birmingham! Bursting with character and charm, we put all of our love and care into this home and added plenty of fun amenities for you and your loved ones to enjoy, including: fun indoor games, a jacuzzi, and secret gardens. There are two areas one can park. There are a few on one side of the house for unloading your vehicle, and plenty in the back for long term parking. We also supply wifi and will grant you access upon your arrival. We look forward to meeting you!',
         price: 200
       },

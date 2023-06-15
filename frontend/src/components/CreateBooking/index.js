@@ -65,7 +65,6 @@ const CreateBooking = ({ spot }) => {
         try {
             const res = await dispatch(postBookingThunk(spot.id, booking))
         } catch (e) {
-            console.log(e)
         }
         history.push('/bookings')
 

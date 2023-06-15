@@ -14,7 +14,6 @@ function Navigation({ isLoaded }) {
     const [min, setMin] = useState('');
     const [max, setMax] = useState('');
     const location = useLocation();
-    console.log('LOCATION -------> : ', location)
     const dispatch = useDispatch()
 
     return (

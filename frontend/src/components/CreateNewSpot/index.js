@@ -65,11 +65,9 @@ const CreateNewSpot = () => {
         }
 
         const spot = await dispatch(postNewSpotThunk(newSpot));
-        console.log("PREVIEW IMAGE : ", preview)
         const previewData = new FormData();
         previewData.append("image", preview)
         previewData.append("preview", true)
-        console.log("FORM DATA : ----> ", previewData)
 
         await csrfFetch(`/api/spots/${spot.id}/images`, {
             method: 'POST',

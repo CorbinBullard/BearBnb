@@ -21,7 +21,6 @@ function App() {
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => {
       if (user) {
-        console.log("HERE    ", user)
         dispatch(fetchUserBookingsThunk())
       }
       else dispatch(clearUserBookingsAction());

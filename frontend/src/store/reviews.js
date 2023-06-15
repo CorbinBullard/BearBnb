@@ -19,7 +19,6 @@ export const fetchCurrentSpotReviewsThunk = (spotId) => async dispatch => {
     if (res.ok) {
         const reviews = await res.json();
         dispatch(loadCurrentSpotReviews(reviews));
-        console.log(reviews)
     }
 }
 
