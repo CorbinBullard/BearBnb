@@ -24,17 +24,10 @@ const SearchBar = () => {
         setMin('')
     }
 
-    // const handleKeyDown = e => {
-    //     e.preventDefault();
+    const handleKeyDown = e => {
 
-    //     if (e.keyCode === 13 || e.key === 'Enter') {
-    //         e.preventDefault()
-    //         if (selected) {
-
-    //             submitSearch()
-    //         }
-    //     }
-    // }
+        if (e.key === 'Enter') submitSearch();
+    }
 
     return (
         <div id="search-page-container">
@@ -42,9 +35,9 @@ const SearchBar = () => {
                 <input type="text"
                     value={name}
                     onChange={e => setName(e.target.value)}
-                    onSelect={() => setSelected(true)}
-                    onBlur={() => setSelected(false)}
-                    // onKeyDown={handleKeyDown}
+                    // onSelect={() => setSelected(true)}
+                    // onBlur={() => setSelected(false)}
+                    onKeyDown={handleKeyDown}
                 />
                 <i id="search-icon" className="fas fa-search" onClick={submitSearch}></i>
             </div>
