@@ -65,6 +65,9 @@ const NewReviewModal = ({ spot, isUpdating, currReview }) => {
                     onChange={e => setReview(e.target.value)}
                     value={review}
                 ></textarea>
+                {submitWithErrors && errors.review && (
+                    <p className="errors">{errors.review}</p>
+                )}
                 <div id="">
                     <div id="star-input-container">
                         <div
@@ -109,7 +112,9 @@ const NewReviewModal = ({ spot, isUpdating, currReview }) => {
                         </div>
                     </div>
                 </div>
-                <button disabled={Object.values(errors).length}>{isUpdating ? "Update Review" : "Submit Your Review"}</button>
+                <button
+                // disabled={Object.values(errors).length}
+                >{isUpdating ? "Update Review" : "Submit Your Review"}</button>
             </form>
         </>
     );
