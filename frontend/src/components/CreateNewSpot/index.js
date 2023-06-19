@@ -33,7 +33,9 @@ const CreateNewSpot = () => {
         if (!city) errorsObj.city = "City is required";
         if (!state) errorsObj.state = "State is required";
         if (!lat) errorsObj.lat = "Latitude is required";
+        if (lat && isNaN(+lat)) errorsObj.lat = "Latitude must be a number";
         if (!lng) errorsObj.lng = "Longitude is required";
+        if (lng && isNaN(+lng)) errorsObj.lng = "Longitude must be a number";
         if (description.length < 30) errorsObj.description = "Description needs a minimum of 30 characters";
         if (!name) errorsObj.name = "Name is required";
         if (!price) errorsObj.price = "Price is required";
