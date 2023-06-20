@@ -1,4 +1,5 @@
 import { csrfFetch } from "./csrf";
+import deepCopy from "./deepCopy";
 
 const LOAD_ALL_SPOTS = 'spots/loadAllSpots';
 const LOAD_CURRENT_SPOT = 'spots/loadCurrentSpot';
@@ -131,7 +132,8 @@ const spotReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOAD_ALL_SPOTS: {
             // const newState = {...state};
-            const newState = { ...state, allSpots: {}, singleSpot: {} };
+            const newState = deepCopy(state);
+            newState.allSpots = {};
             action.spots.Spots.forEach(spot => {
                 newState.allSpots[spot.id] = spot
             });
