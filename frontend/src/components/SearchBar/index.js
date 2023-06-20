@@ -2,26 +2,25 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchQueriedSpotsThunk } from "../../store/spots";
 import "./SearchBar.css"
+import OpenModalButton from "../OpenModalButton";
+import PriceFilterModal from "./PriceFilterModal";
+import { useFilters } from "../../context/Filters";
 
 const SearchBar = () => {
-    const [name, setName] = useState('');
+    const [_name, _setName] = useState('');
     const [min, setMin] = useState('');
     const [max, setMax] = useState('');
     const dispatch = useDispatch();
 
     const [selected, setSelected] = useState(false);
+    const {name, setName} = useFilters();
 
-    useEffect(() => {
 
-        if (min < 0) setMin('');
-        if (max < 0) setMax('');
-    }, [min, max, name])
 
     const submitSearch = (e) => {
-        dispatch(fetchQueriedSpotsThunk({ name }));
-        setName('');
-        setMax('');
-        setMin('')
+        // dispatch(fetchQueriedSpotsThunk({ name }));
+        setName(_name);
+        _setName('')
     }
 
     const handleKeyDown = e => {
@@ -32,13 +31,17 @@ const SearchBar = () => {
         <div id="search-page-container">
             <div id="search-name-container">
                 <input type="text"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
+                    value={_name}
+                    onChange={e => _setName(e.target.value)}
 
                     onKeyDown={handleKeyDown}
                 />
                 <i id="search-icon" className="fas fa-search" onClick={submitSearch}></i>
             </div>
+            <OpenModalButton
+                buttonText={<i className="fas fa-sliders-h" />}
+                modalComponent={<PriceFilterModal />}
+            />
             {/* <div id="search-price-container">
                 <input
                     placeholder="Min Price"

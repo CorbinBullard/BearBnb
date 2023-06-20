@@ -51,17 +51,17 @@
     gap: 4px;
 }
 
-#city-container {
+/* #city-container {
     display: flex;
     flex-direction: column;
     width: 80%;
-}
+} */
 
-#state-container {
+/* #state-container {
     display: flex;
     flex-direction: column;
-    width: 20%;
-}
+    width: 30%;
+} */
 
 #lat-lng {
     width: 100%;

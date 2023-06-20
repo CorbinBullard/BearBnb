@@ -31,7 +31,7 @@ const CreateNewSpot = () => {
         if (!country) errorsObj.country = "Country is required";
         if (!address) errorsObj.address = "Address is required";
         if (!city) errorsObj.city = "City is required";
-        if (!state) errorsObj.state = "State is required";
+        if (!state) errorsObj.state = "State required";
         if (!lat) errorsObj.lat = "Latitude is required";
         if (lat && isNaN(+lat)) errorsObj.lat = "Latitude must be a number";
         if (!lng) errorsObj.lng = "Longitude is required";

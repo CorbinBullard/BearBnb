@@ -6,21 +6,24 @@ import logo from '../../assets/Bearbnb.png'
 import './Navigation.css';
 import SearchBar from '../SearchBar';
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
-import { fetchAllSpotsThunk } from '../../store/spots';
+import { fetchAllSpotsThunk, fetchQueriedSpotsThunk } from '../../store/spots';
+import { useFilters } from '../../context/Filters';
 
 function Navigation({ isLoaded }) {
     const sessionUser = useSelector(state => state.session.user);
 
-    const [min, setMin] = useState('');
-    const [max, setMax] = useState('');
+
     const location = useLocation();
     const dispatch = useDispatch()
+    const { name, minPrice, maxPrice } = useFilters();
 
     return (
         <div id='nav-page-container'>
             <ul id='nav-container'>
                 <li id='nav-home-button-icon'>
-                    <NavLink exact to="/" className='nav-home-button'><img src={logo} className='logo-image' onClick={() => dispatch(fetchAllSpotsThunk())}/></NavLink>
+                    <NavLink exact to="/" className='nav-home-button'><img src={logo} className='logo-image' onClick={() => {
+                        dispatch(fetchQueriedSpotsThunk({ name, minPrice, maxPrice }))
+                    }} /></NavLink>
                 </li>
                 {isLoaded && (
                     <>

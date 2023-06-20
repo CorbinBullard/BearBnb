@@ -10,6 +10,7 @@ import { Modal, ModalProvider } from './context/Modal';
 import { Provider } from 'react-redux';
 
 import * as sessionActions from "./store/session";
+import { FiltersProvider } from './context/Filters';
 
 
 const store = configureStore();
@@ -29,14 +30,16 @@ if (process.env.NODE_ENV !== "production") {
 
 function Root() {
   return (
-    <ModalProvider>
-      <Provider store={store}>
-        <BrowserRouter>
-          <App />
-          <Modal />
-        </BrowserRouter>
-      </Provider>
-    </ModalProvider>
+    <Provider store={store}>
+      <FiltersProvider>
+        <ModalProvider>
+          <BrowserRouter>
+            <App />
+            <Modal />
+          </BrowserRouter>
+        </ModalProvider>
+      </FiltersProvider>
+    </Provider>
   );
 }
 const container = document.getElementById('root');
@@ -47,4 +50,3 @@ root.render(
     <Root />
   </React.StrictMode>
 );
-

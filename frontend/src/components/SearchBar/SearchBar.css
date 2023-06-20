@@ -1,6 +1,14 @@
 #search-page-container {
-
+    display: flex;
+    gap: 20px;
 }
+
+#search-page-container button {
+    margin: 0;
+    width: 50px;
+    font-size: large;
+}
+
 #search-name-container {
     min-width: 500px;
     display: flex;
@@ -9,15 +17,45 @@
     align-items: center;
     border-radius: 10px;
 }
+
 #search-name-container input {
     font-size: large;
     border: none;
 }
+
 #search-name-container input:focus {
     outline: none;
 
 }
+
 #search-icon {
     cursor: pointer;
 }
 
+#filters-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+#filters-title {
+    font-size: small;
+    font-style: italic;
+    padding: 5px 10px;
+    border-radius: 18px;
+}
+
+.current-filter-container {
+    font-size: small;
+    cursor: pointer;
+    font-style: italic;
+    padding: 5px 10px;
+    border-radius: 18px;
+}
+
+.current-filter-container:hover {
+    background-color: rgb(220, 220, 220);
+}
+#price-filter-modal-container form input {
+    margin-bottom: 10px;
+}
