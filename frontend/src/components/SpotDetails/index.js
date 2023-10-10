@@ -8,6 +8,7 @@ import NewReviewModal from "../NewReviewModal";
 import "./SpotDetails.css"
 import DeleteReviewModal from "./DeleteReviewModal";
 import CreateBooking from "../CreateBooking";
+import Loader from "../Loader";
 
 
 
@@ -21,10 +22,16 @@ const SpotDetails = () => {
     const reviews = Object.values(useSelector(state => state.reviews.spot));
     const user = useSelector(state => state.session.user);
     const [hasPosted, setHasPosted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        dispatch(fetchCurrentSpotThunk(params.spotId));
-        dispatch(fetchCurrentSpotReviewsThunk(params.spotId));
+        async function fetchData() {
+            setIsLoading(true);
+            await dispatch(fetchCurrentSpotThunk(params.spotId));
+            await dispatch(fetchCurrentSpotReviewsThunk(params.spotId));
+            setIsLoading(false)
+        }
+        fetchData();
 
     }, [dispatch, params.spotId])
 
@@ -50,7 +57,7 @@ const SpotDetails = () => {
 
     const canPostReview = (user && spot.ownerId !== user?.id && !hasPosted);
 
-    return (
+    return (isLoading ? <Loader /> :
         <div id="spot-details-container">
             <div id="name-location">
                 <h3 id="spot-name">{spot.name}</h3>
