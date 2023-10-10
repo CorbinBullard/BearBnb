@@ -9,12 +9,14 @@ import "./SpotDetails.css"
 import DeleteReviewModal from "./DeleteReviewModal";
 import CreateBooking from "../CreateBooking";
 import Loader from "../Loader";
+import { useModal } from "../../context/Modal";
 
 
 
 
 
 const SpotDetails = () => {
+    const { setModalContent, closeModal } = useModal();
 
     const dispatch = useDispatch();
     const params = useParams();
@@ -29,7 +31,8 @@ const SpotDetails = () => {
             setIsLoading(true);
             await dispatch(fetchCurrentSpotThunk(params.spotId));
             await dispatch(fetchCurrentSpotReviewsThunk(params.spotId));
-            setIsLoading(false)
+            setIsLoading(false);
+            closeModal();
         }
         fetchData();
 
@@ -57,7 +60,8 @@ const SpotDetails = () => {
 
     const canPostReview = (user && spot.ownerId !== user?.id && !hasPosted);
 
-    return (isLoading ? <Loader /> :
+    return (isLoading ? setModalContent(<Loader />) :
+
         <div id="spot-details-container">
             <div id="name-location">
                 <h3 id="spot-name">{spot.name}</h3>

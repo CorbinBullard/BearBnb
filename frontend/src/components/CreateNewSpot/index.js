@@ -4,6 +4,8 @@ import { postNewSpotThunk } from "../../store/spots";
 import { csrfFetch } from "../../store/csrf";
 import { useHistory } from "react-router-dom";
 import "./CreateNewSpot.css"
+import { useModal } from "../../context/Modal";
+import Loader from "../Loader";
 
 const CreateNewSpot = () => {
     const [country, setCountry] = useState('');
@@ -25,6 +27,7 @@ const CreateNewSpot = () => {
     const dispatch = useDispatch();
 
     const history = useHistory();
+    const { setModalContent, closeModal } = useModal();
 
     useEffect(() => {
         const errorsObj = {}
@@ -50,6 +53,8 @@ const CreateNewSpot = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
+        setModalContent(<Loader />)
+
         if (Object.values(errors).length) {
             setSubmitWithErrors(true);
             return window.alert("Cannot Submit");
@@ -84,7 +89,7 @@ const CreateNewSpot = () => {
                 body: photoData
             })
         }
-
+        closeModal();
         history.push(`/spots/${spot.id}`)
 
     }
