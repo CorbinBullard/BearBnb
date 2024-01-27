@@ -5,7 +5,7 @@ import { csrfFetch } from "../../store/csrf";
 import { useHistory } from "react-router-dom";
 import "./CreateNewSpot.css"
 import { useModal } from "../../context/Modal";
-import Loader from "../Loader";
+import Loader from "../../components/Loader";
 
 const CreateNewSpot = () => {
     const [country, setCountry] = useState('');

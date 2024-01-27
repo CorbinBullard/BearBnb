@@ -7,7 +7,6 @@ import { csrfFetch } from "../../store/csrf";
 // import SpotForm from "../SpotForm";
 
 const UpdateSpot = () => {
-    let currSpot;
 
     const spot = useSelector(state => state.spots.singleSpot)
     const [country, setCountry] = useState('');
@@ -44,7 +43,7 @@ const UpdateSpot = () => {
     async function autoPopulate() {
         const spot = await dispatch(fetchCurrentSpotThunk(id));
 
-        currSpot = spot;
+
         setCountry(spot.country);
         setAddress(spot.address);
         setCity(spot.city);

@@ -5,14 +5,14 @@ import LoginFormModal from "./components/LoginFormModal";
 import SignupFormPage from "./components/SignupFormModal";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
-import LandingPage from "./components/LandingPage";
 import SpotDetails from "./components/SpotDetails";
-import CreateNewSpot from "./components/CreateNewSpot";
-import ManageYourSpots from "./components/ManageYourSpots";
-import UpdateSpot from "./components/UpdateSpot";
+import UpdateSpot from "./pages/UpdateSpot";
 import { clearUserBookingsAction, fetchUserBookingsThunk } from "./store/bookings";
-import MyBookings from "./components/MyBookings";
+import MyBookings from "./pages/MyBookings";
 import Footer from "./components/Footer";
+import LandingPage from "./pages/LandingPage";
+import CreateNewSpot from "./pages/CreateNewSpot";
+import ManageYourSpots from "./pages/ManageYourSpots";
 
 function App() {
   const dispatch = useDispatch();

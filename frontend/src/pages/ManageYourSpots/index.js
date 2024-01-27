@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrentUserSpots } from "../../store/spots";
-import SpotCard from "../SpotCard";
+import SpotCard from "../../components/SpotCard";
 import { useHistory } from "react-router-dom";
-import OpenModalButton from "../OpenModalButton";
+import OpenModalButton from "../../components/OpenModalButton";
 import SpotDeletePrompt from "./spotDeletePrompt";
 import "./ManageYourSpots.css"
-import Loader from "../Loader";
+import Loader from "../../components/Loader";
 import { useModal } from "../../context/Modal";
 
 const ManageYourSpots = () => {
@@ -24,7 +24,7 @@ const ManageYourSpots = () => {
             closeModal();
         }
         getSpot();
-    }, [])
+    }, [dispatch])
 
     const createSpot = () => {
         history.push("/spots/new");
